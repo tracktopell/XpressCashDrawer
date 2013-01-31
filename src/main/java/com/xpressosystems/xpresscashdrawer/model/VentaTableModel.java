@@ -4,6 +4,7 @@
  */
 package com.xpressosystems.xpresscashdrawer.model;
 
+import com.xpressosystems.xpresscashdrawer.dao.EntidadInexistenteException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +35,11 @@ public class VentaTableModel implements TableModel{
 	public VentaTableModel(){
 		this.ventaList = new ArrayList<Venta>();
 		tableModelListenerList = new ArrayList<TableModelListener> ();
-		//refrescar();
+	}
+	
+	public VentaTableModel(List<Venta> ventaList,Hashtable<Integer,Double> ventaImporteList){
+		this.ventaList			= ventaList;
+		this.ventaImporteList	= ventaImporteList;
 	}
 
 	@Override
@@ -113,24 +118,5 @@ public class VentaTableModel implements TableModel{
 			tml.tableChanged(new TableModelEvent(this));
 		}
 	}
-	/*
-	public void refrescar() {
-		VentaDAO ventaDAO = VentaDAOFactory.getVentaDAO();
-		ventaList = ventaDAO.getAll(); 		
-		ventaImporteList       = new Hashtable<Integer,Double>();
-		for(Venta v: ventaList){
-			double t=0.0;
-			try {
-				List<DetalleVenta> detalleVenta = ventaDAO.getDetalleVenta(v.getId());
-				for(DetalleVenta dv: detalleVenta){
-					t += dv.getPrecioVenta() * dv.getCantidad();
-				}
-			} catch (EntidadInexistenteException ex) {
-				
-			}
-			
-			ventaImporteList.put(v.getId(), t);
-		}
-	}
-	*/
+	
 }

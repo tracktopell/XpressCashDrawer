@@ -15,6 +15,9 @@ public class Venta {
 	private int id;
 	private Date fecha;
 
+	public Venta() {
+	}
+
 	public Venta(int id, Date fecha) {
 		this.id = id;
 		this.fecha = fecha;

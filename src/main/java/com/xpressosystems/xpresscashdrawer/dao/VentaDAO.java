@@ -17,7 +17,7 @@ public interface VentaDAO {
 	List<DetalleVenta> getDetalleVenta(Integer ventaId)throws EntidadInexistenteException;
 
 	Venta  getVenta(Integer ventaId);
-	Venta  edit(Venta producto,List<DetalleVenta> detalleVentaList) throws EntidadInexistenteException;
+	Venta  edit(Venta venta,List<DetalleVenta> detalleVentaList) throws EntidadInexistenteException;
 	Venta  persist(Venta producto,List<DetalleVenta> detalleVentaList) throws EntidadExistenteException;
-	Venta  delete(Venta producto) throws EntidadInexistenteException;
+	Venta  delete(Venta venta) throws EntidadInexistenteException;
 }

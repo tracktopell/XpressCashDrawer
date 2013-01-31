@@ -4,7 +4,8 @@
  */
 package com.xpressosystems.xpresscashdrawer.dao;
 
-import com.xpressosystems.xpresscashdrawer.dao.memory.ProductoDAOInMemory;
+import com.xpressosystems.xpresscashdrawer.dao.jdbc.DataSourceAdaptor;
+import com.xpressosystems.xpresscashdrawer.dao.jdbc.ProductoDAOJDBC;
 
 /**
  *
@@ -16,7 +17,7 @@ public class ProductoDAOFactory {
 	
 	public static ProductoDAO getProductoDAO(){
 		if(productoDAO == null){
-			productoDAO = new ProductoDAOInMemory(); 
+			productoDAO = new ProductoDAOJDBC(DataSourceAdaptor.getConnection());			
 		}
 		return productoDAO;
 	}

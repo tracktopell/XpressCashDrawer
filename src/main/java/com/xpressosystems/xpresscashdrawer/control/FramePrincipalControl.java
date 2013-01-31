@@ -133,4 +133,8 @@ public class FramePrincipalControl implements ActionListener{
 	private void ventaTerminar_actionPerformed() {
 		((CardLayout)framePrincipal.getPanels().getLayout()).show(framePrincipal.getPanels(), "panelVenta");
 	}	
+
+	public void setNombreNegocio(String negocio) {
+		framePrincipal.setTitle(negocio);
+	}
 }

@@ -4,10 +4,13 @@
  */
 package com.xpressosystems.xpresscashdrawer.control;
 
+import com.xpressosystems.xpresscashdrawer.dao.EntidadInexistenteException;
 import com.xpressosystems.xpresscashdrawer.dao.VentaDAO;
 import com.xpressosystems.xpresscashdrawer.dao.VentaDAOFactory;
+import com.xpressosystems.xpresscashdrawer.model.DetalleVenta;
 import com.xpressosystems.xpresscashdrawer.model.FechaCellRender;
 import com.xpressosystems.xpresscashdrawer.model.ImporteCellRender;
+import com.xpressosystems.xpresscashdrawer.model.Venta;
 import com.xpressosystems.xpresscashdrawer.model.VentaTableModel;
 import com.xpressosystems.xpresscashdrawer.view.PanelVentas;
 import java.awt.event.ActionEvent;
@@ -15,6 +18,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
+import java.util.Hashtable;
+import java.util.List;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
@@ -50,8 +55,30 @@ public class PanelVentasControl implements ActionListener,TableModelListener,Mou
 		
 	}
 	
+	public void refrescar() {
+		VentaDAO ventaDAO = VentaDAOFactory.getVentaDAO();
+		List<Venta> ventaList  = ventaDAO.getAll(); 		
+		Hashtable<Integer,Double> ventaImporteList = new Hashtable<Integer,Double>();
+		for(Venta v: ventaList){
+			double t=0.0;
+			try {
+				List<DetalleVenta> detalleVenta = ventaDAO.getDetalleVenta(v.getId());
+				for(DetalleVenta dv: detalleVenta){
+					t += dv.getPrecioVenta() * dv.getCantidad();
+				}
+			} catch (EntidadInexistenteException ex) {
+				
+			}
+			
+			ventaImporteList.put(v.getId(), t);
+		}
+		ventasTM = new VentaTableModel(ventaList, ventaImporteList);
+		panelVentas.getVentasJTable().setModel(ventasTM);
+		panelVentas.getVentasJTable().updateUI();
+	}
+	
 	public void estadoInicial(){
-		//ventasTM.refrescar();
+		refrescar();
 		panelVentas.getVentasJTable().updateUI();		
 		panelVentas.getVentasJTable().getSelectionModel().clearSelection();
 	}

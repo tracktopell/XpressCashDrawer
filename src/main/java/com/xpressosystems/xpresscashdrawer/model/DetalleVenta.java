@@ -15,6 +15,9 @@ public class DetalleVenta {
 	private int cantidad;
 	private Double precioVenta;
 
+	public DetalleVenta() {
+	}
+	
 	public DetalleVenta(int id, int ventaId, String productoCodigo, int cantidad, Double precioVenta) {
 		this.id = id;
 		this.ventaId = ventaId;

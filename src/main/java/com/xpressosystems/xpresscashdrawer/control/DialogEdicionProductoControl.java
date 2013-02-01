@@ -12,11 +12,12 @@ import com.xpressosystems.xpresscashdrawer.model.Producto;
 import com.xpressosystems.xpresscashdrawer.view.DialogEdicionProducto;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -24,25 +25,33 @@ import javax.swing.JTextField;
  *
  * @author alfredo
  */
-public class DialogEdicionProductoControl implements ActionListener{
-	
+public class DialogEdicionProductoControl implements ActionListener {
+
 	ProductoDAO prodcutoDAO;
 	DialogEdicionProducto dialogEdicionProducto;
-	Producto  productoEdicion;
+	Producto productoEdicion;
 	int optionClosed = 0;
 	DecimalFormat df = new DecimalFormat("########0.00");
-        
+	BufferedImage imagenDeProducto;
+	BufferedImage imagenDefaultProducto;
+	final String imagenesProductos = "./Productos/";
+	
 	private DialogEdicionProductoControl(DialogEdicionProducto panelEdicionProducto) {
 		this.dialogEdicionProducto = panelEdicionProducto;
 		optionClosed = JOptionPane.CANCEL_OPTION;
-		
+
 		dialogEdicionProducto.getAceptar().addActionListener(this);
 		dialogEdicionProducto.getCancelar().addActionListener(this);
-		
+
 		prodcutoDAO = ProductoDAOFactory.getProductoDAO();
+		try {
+			imagenDefaultProducto = ImageIO.read(DialogEdicionProductoControl.class.getResourceAsStream("/images/producto.jpg"));
+		} catch (IOException ex) {
+			imagenDefaultProducto = null;
+		}
 	}
-	
-	public void estadoInicial(){
+
+	public void estadoInicial() {
 		dialogEdicionProducto.getCampos()[0].setText(productoEdicion.getCodigo());
 		dialogEdicionProducto.getCampos()[1].setText(productoEdicion.getNombre());
 		dialogEdicionProducto.getCampos()[2].setText(productoEdicion.getLinea());
@@ -50,88 +59,87 @@ public class DialogEdicionProductoControl implements ActionListener{
 		dialogEdicionProducto.getCampos()[4].setText(df.format(productoEdicion.getCosto()));
 		dialogEdicionProducto.getCampos()[5].setText(df.format(productoEdicion.getPrecioVenta()));
 		dialogEdicionProducto.getCampos()[6].setText(String.valueOf(productoEdicion.getPiezasXCaja()));
-		dialogEdicionProducto.getCampos()[7].setText(String.valueOf(productoEdicion.getExistencia()));	
-		
-		if(!esEdicionNuevoProducto()){
-			dialogEdicionProducto.getCampos()[0].setEnabled(false);			
+		dialogEdicionProducto.getCampos()[7].setText(String.valueOf(productoEdicion.getExistencia()));
+
+		if (!esEdicionNuevoProducto()) {
+			dialogEdicionProducto.getCampos()[0].setEnabled(false);
 			dialogEdicionProducto.getCampos()[1].requestFocus();
 		} else {
-			dialogEdicionProducto.getCampos()[0].setEnabled(true);			
+			dialogEdicionProducto.getCampos()[0].setEnabled(true);
 			dialogEdicionProducto.getCampos()[0].requestFocus();
 		}
-		
+		cargarImagenDeProducto();
 	}
-	
-	public static int crearProducto(Producto producto){
+
+	public static int crearProducto(Producto producto) {
 		int ret = JOptionPane.CANCEL_OPTION;
-			
+
 		DialogEdicionProducto panelEdicionProducto = new DialogEdicionProducto("Agregar nuevo Producto");
-		
+
 		DialogEdicionProductoControl control = new DialogEdicionProductoControl(panelEdicionProducto);
 		control.productoEdicion = producto;
-		
+
 		control.estadoInicial();
 
 		panelEdicionProducto.getSurtirLbl().setVisible(false);
 		panelEdicionProducto.getSurtir().setVisible(false);
-		
+
 		panelEdicionProducto.setVisible(true);
-		
+
 		ret = control.optionClosed;
-		
+
 		return ret;
 	}
-	
-	public static int crearProducto_precargado(Producto producto,String codigo){
+
+	public static int crearProducto_precargado(Producto producto, String codigo) {
 		int ret = JOptionPane.CANCEL_OPTION;
-			
+
 		DialogEdicionProducto panelEdicionProducto = new DialogEdicionProducto("Agregar nuevo Producto");
-		
+
 		DialogEdicionProductoControl control = new DialogEdicionProductoControl(panelEdicionProducto);
 		control.productoEdicion = producto;
-		
+
 		control.estadoInicial();
 
 		panelEdicionProducto.getCampos()[0].setText(codigo);
-		
+
 		panelEdicionProducto.getSurtirLbl().setVisible(false);
 		panelEdicionProducto.getSurtir().setVisible(false);
-		
+
 		panelEdicionProducto.setVisible(true);
-		
+
 		ret = control.optionClosed;
-		
+
 		return ret;
 	}
-	
+
 	static int editaProducto(Producto producto) {
 		int ret = JOptionPane.CANCEL_OPTION;
-			
+
 		DialogEdicionProducto panelEdicionProducto = new DialogEdicionProducto("Edición de Producto");
-		
+
 		DialogEdicionProductoControl control = new DialogEdicionProductoControl(panelEdicionProducto);
 		control.productoEdicion = producto;
-		
+
 		control.estadoInicial();
-		
+
 		panelEdicionProducto.getSurtirLbl().setVisible(true);
-		
+
 		panelEdicionProducto.getSurtir().setVisible(true);
 		panelEdicionProducto.getSurtir().setText("0");
-		
+
 		panelEdicionProducto.setVisible(true);
-		
+
 		ret = control.optionClosed;
-		
+
 		return ret;
 	}
-	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == dialogEdicionProducto.getAceptar()) {
+		if (e.getSource() == dialogEdicionProducto.getAceptar()) {
 			aceptar_actionPerformed();
-		} else if(e.getSource() == dialogEdicionProducto.getCancelar()) {
+		} else if (e.getSource() == dialogEdicionProducto.getCancelar()) {
 			cancelar_actionPerformed();
 		}
 	}
@@ -139,7 +147,7 @@ public class DialogEdicionProductoControl implements ActionListener{
 	private void aceptar_actionPerformed() {
 		try {
 			validacionCampos();
-		}catch(ValidacionCamposException e){
+		} catch (ValidacionCamposException e) {
 			JOptionPane.showMessageDialog(dialogEdicionProducto, e.getMessage(), "Error en Producto", JOptionPane.ERROR_MESSAGE);
 			final JTextField source = e.getSource();
 			source.setSelectionStart(0);
@@ -147,111 +155,111 @@ public class DialogEdicionProductoControl implements ActionListener{
 			source.requestFocus();
 			return;
 		}
-		
-		if(esEdicionNuevoProducto()){
+
+		if (esEdicionNuevoProducto()) {
 			guardarNuevoProducto();
 		} else {
 			guardarEdicionProducto();
 		}
 	}
 
-	private void validacionCampos() throws ValidacionCamposException{
-		
+	private void validacionCampos() throws ValidacionCamposException {
+
 		validacionCamposLlenos();
-		
+
 		final String codigo = dialogEdicionProducto.getCampos()[0].getText();
-		if(!codigo.matches("([0-9]){6,18}")){
-			throw new ValidacionCamposException("CODIGO de Barras deb ser solo números (de 6 a 18, Use el Escanner)",dialogEdicionProducto.getCampos()[0]);
+		if (!codigo.matches("([0-9]){6,18}")) {
+			throw new ValidacionCamposException("CODIGO de Barras deb ser solo números (de 6 a 18, Use el Escanner)", dialogEdicionProducto.getCampos()[0]);
 		}
-		
-		if(esEdicionNuevoProducto()){
+
+		if (esEdicionNuevoProducto()) {
 			final Producto productoEncontrado = prodcutoDAO.getProducto(codigo);
-			if(productoEncontrado != null) {
+			if (productoEncontrado != null) {
 				dialogEdicionProducto.getCampos()[0].setText("");
-				throw new ValidacionCamposException("Este CODIGO ya existe de otro Producto("+productoEncontrado.getNombre()+")",dialogEdicionProducto.getCampos()[0]);
+				throw new ValidacionCamposException("Este CODIGO ya existe de otro Producto(" + productoEncontrado.getNombre() + ")", dialogEdicionProducto.getCampos()[0]);
 			}
 		}
-		
+
 		final String nombre = dialogEdicionProducto.getCampos()[1].getText();
-		if(!(nombre.trim().length()>4 && nombre.trim().length()<=35)){
-			throw new ValidacionCamposException("El Nombre debe ser correcto (5 a 35 Letras)",dialogEdicionProducto.getCampos()[1]);
+		if (!(nombre.trim().length() > 4 && nombre.trim().length() <= 35)) {
+			throw new ValidacionCamposException("El Nombre debe ser correcto (5 a 35 Letras)", dialogEdicionProducto.getCampos()[1]);
 		}
-		
+
 		final String linea = dialogEdicionProducto.getCampos()[2].getText();
-		if(!(linea.trim().length()>4 && linea.trim().length()<=35)){
-			throw new ValidacionCamposException("La Linea debe ser correcta (5 a 35 Letras)",dialogEdicionProducto.getCampos()[2]);
+		if (!(linea.trim().length() > 4 && linea.trim().length() <= 35)) {
+			throw new ValidacionCamposException("La Linea debe ser correcta (5 a 35 Letras)", dialogEdicionProducto.getCampos()[2]);
 		}
-		
+
 		final String marca = dialogEdicionProducto.getCampos()[3].getText();
-		if(!(marca.trim().length()>4 && marca.trim().length()<=35)){
-			throw new ValidacionCamposException("La Marca debe ser correcta (5 a 35 Letras)",dialogEdicionProducto.getCampos()[3]);
+		if (!(marca.trim().length() > 4 && marca.trim().length() <= 35)) {
+			throw new ValidacionCamposException("La Marca debe ser correcta (5 a 35 Letras)", dialogEdicionProducto.getCampos()[3]);
 		}
-		
+
 		final String costo = dialogEdicionProducto.getCampos()[4].getText();
 		double costoParsed = -1.0;
 		try {
 			costoParsed = Double.parseDouble(costo);
-			if(costoParsed <= 0.02){
-				throw new ValidacionCamposException("El Costo debe ser lógicamente mayor a 20 Cent. ( $ 0.02 )",dialogEdicionProducto.getCampos()[4]);
+			if (costoParsed <= 0.02) {
+				throw new ValidacionCamposException("El Costo debe ser lógicamente mayor a 20 Cent. ( $ 0.02 )", dialogEdicionProducto.getCampos()[4]);
 			}
-		}catch(NumberFormatException nfe){
+		} catch (NumberFormatException nfe) {
 			dialogEdicionProducto.getCampos()[4].setText("0.00");
-			throw new ValidacionCamposException("EL Costo debe ser un Importe Monetario",dialogEdicionProducto.getCampos()[4]);
+			throw new ValidacionCamposException("EL Costo debe ser un Importe Monetario", dialogEdicionProducto.getCampos()[4]);
 		}
-		
+
 		final String precio = dialogEdicionProducto.getCampos()[5].getText();
 		try {
 			double precioParsed = Double.parseDouble(precio);
-			if(precioParsed <= costoParsed+0.02){
-				throw new ValidacionCamposException("El Precio debe ser lógicamente mayor al Costo",dialogEdicionProducto.getCampos()[5]);
+			if (precioParsed <= costoParsed + 0.02) {
+				throw new ValidacionCamposException("El Precio debe ser lógicamente mayor al Costo", dialogEdicionProducto.getCampos()[5]);
 			}
-		}catch(NumberFormatException nfe){
+		} catch (NumberFormatException nfe) {
 			dialogEdicionProducto.getCampos()[5].setText("0.00");
-			throw new ValidacionCamposException("El Precio debe ser un Importe Monetario",dialogEdicionProducto.getCampos()[5]);
+			throw new ValidacionCamposException("El Precio debe ser un Importe Monetario", dialogEdicionProducto.getCampos()[5]);
 		}
-		
+
 		final String piezas = dialogEdicionProducto.getCampos()[6].getText();
 		try {
 			int piezasParsed = Integer.parseInt(piezas);
-			if(piezasParsed <= 2){
-				throw new ValidacionCamposException("Una xpresscashdrawer debe tener lógicamente mas de 2 piezas",dialogEdicionProducto.getCampos()[6]);
+			if (piezasParsed <= 2) {
+				throw new ValidacionCamposException("Una xpresscashdrawer debe tener lógicamente mas de 2 piezas", dialogEdicionProducto.getCampos()[6]);
 			}
-		}catch(NumberFormatException nfe){
+		} catch (NumberFormatException nfe) {
 			dialogEdicionProducto.getCampos()[6].setText("0");
-			throw new ValidacionCamposException("Las Piezas X Caja debe ser una cantidad entera",dialogEdicionProducto.getCampos()[6]);
+			throw new ValidacionCamposException("Las Piezas X Caja debe ser una cantidad entera", dialogEdicionProducto.getCampos()[6]);
 		}
-		
+
 		final String existencia = dialogEdicionProducto.getCampos()[7].getText();
 		try {
 			int piezasParsed = Integer.parseInt(piezas);
-			if(piezasParsed < 1){
-				throw new ValidacionCamposException("La existencia debe ser lógicamente por lo menos 1 piezas",dialogEdicionProducto.getCampos()[7]);
+			if (piezasParsed < 1) {
+				throw new ValidacionCamposException("La existencia debe ser lógicamente por lo menos 1 piezas", dialogEdicionProducto.getCampos()[7]);
 			}
-		}catch(NumberFormatException nfe){
+		} catch (NumberFormatException nfe) {
 			dialogEdicionProducto.getCampos()[7].setText("0");
-			throw new ValidacionCamposException("La existencia debe ser una cantidad entera",dialogEdicionProducto.getCampos()[7]);
+			throw new ValidacionCamposException("La existencia debe ser una cantidad entera", dialogEdicionProducto.getCampos()[7]);
 		}
-		
-		if(dialogEdicionProducto.getSurtir().isVisible()){
+
+		if (dialogEdicionProducto.getSurtir().isVisible()) {
 			final String surtir = dialogEdicionProducto.getSurtir().getText();
 			try {
 				int surtirParsed = Integer.parseInt(surtir);
-				if(surtirParsed < 0){
-					throw new ValidacionCamposException("La cantidad a Surtir debe ser lógicamente > 0",dialogEdicionProducto.getSurtir());
+				if (surtirParsed < 0) {
+					throw new ValidacionCamposException("La cantidad a Surtir debe ser lógicamente > 0", dialogEdicionProducto.getSurtir());
 				}
-			}catch(NumberFormatException nfe){
+			} catch (NumberFormatException nfe) {
 				dialogEdicionProducto.getSurtir().setText("0");
-				throw new ValidacionCamposException("La cantidad a Surtir debe ser una cantidad entera",dialogEdicionProducto.getCampos()[7]);
+				throw new ValidacionCamposException("La cantidad a Surtir debe ser una cantidad entera", dialogEdicionProducto.getCampos()[7]);
 			}
 		}
-		
+
 	}
 
 	private boolean validacionCamposLlenos() throws ValidacionCamposException {
 		final JTextField[] campos = dialogEdicionProducto.getCampos();
 		for (JTextField c : campos) {
 			if (c.getText().trim().length() == 0) {
-				throw new ValidacionCamposException("Debe llenar este campo",c);
+				throw new ValidacionCamposException("Debe llenar este campo", c);
 			}
 		}
 		return true;
@@ -264,7 +272,7 @@ public class DialogEdicionProductoControl implements ActionListener{
 			optionClosed = JOptionPane.OK_OPTION;
 			dialogEdicionProducto.dispose();
 		} catch (EntidadExistenteException ex) {
-			JOptionPane.showMessageDialog(dialogEdicionProducto, "El producto no se puede guardar", "Error en Producto", JOptionPane.ERROR_MESSAGE);			
+			JOptionPane.showMessageDialog(dialogEdicionProducto, "El producto no se puede guardar", "Error en Producto", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -275,12 +283,12 @@ public class DialogEdicionProductoControl implements ActionListener{
 			optionClosed = JOptionPane.OK_OPTION;
 			dialogEdicionProducto.dispose();
 		} catch (EntidadInexistenteException ex) {
-			JOptionPane.showMessageDialog(dialogEdicionProducto, "El producto no se puede guardar", "Error en Producto", JOptionPane.ERROR_MESSAGE);			
+			JOptionPane.showMessageDialog(dialogEdicionProducto, "El producto no se puede guardar", "Error en Producto", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	private boolean esEdicionNuevoProducto() {
-		return productoEdicion.getCodigo()==null ||productoEdicion.getCodigo().trim().length()==0;
+		return productoEdicion.getCodigo() == null || productoEdicion.getCodigo().trim().length() == 0;
 	}
 
 	private void vaciarDatosCapturados() throws NumberFormatException {
@@ -292,16 +300,16 @@ public class DialogEdicionProductoControl implements ActionListener{
 		productoEdicion.setPrecioVenta(Double.parseDouble(dialogEdicionProducto.getCampos()[5].getText()));
 		productoEdicion.setPiezasXCaja(Integer.parseInt(dialogEdicionProducto.getCampos()[6].getText()));
 		productoEdicion.setExistencia(Integer.parseInt(dialogEdicionProducto.getCampos()[7].getText()));
-		if(! esEdicionNuevoProducto()){
-			if(dialogEdicionProducto.getSurtir().getText().trim().length()>0){
+		if (!esEdicionNuevoProducto()) {
+			if (dialogEdicionProducto.getSurtir().getText().trim().length() > 0) {
 				final String surtir = dialogEdicionProducto.getSurtir().getText();
 				try {
 					int surtirParsed = Integer.parseInt(surtir);
-					if(surtirParsed > 0){
+					if (surtirParsed > 0) {
 						productoEdicion.setExistencia(productoEdicion.getExistencia() + surtirParsed);
 					}
-				}catch(NumberFormatException nfe){
-					dialogEdicionProducto.getSurtir().setText("0");					
+				} catch (NumberFormatException nfe) {
+					dialogEdicionProducto.getSurtir().setText("0");
 				}
 			}
 		}
@@ -311,6 +319,22 @@ public class DialogEdicionProductoControl implements ActionListener{
 		optionClosed = JOptionPane.CANCEL_OPTION;
 		dialogEdicionProducto.dispose();
 	}
-	
-	
+
+	private void cargarImagenDeProducto() {
+		if (esEdicionNuevoProducto()) {
+			dialogEdicionProducto.getImagenProducto().setIcon(new ImageIcon(imagenDefaultProducto));
+		} else {
+			try {
+				
+				imagenDeProducto = ImageIO.read(new FileInputStream(imagenesProductos+productoEdicion.getCodigo().toUpperCase()+".jpg"));
+				dialogEdicionProducto.getImagenProducto().setIcon(new ImageIcon(imagenDeProducto));
+			} catch (IOException ex) {
+				imagenDeProducto = null;
+				dialogEdicionProducto.getImagenProducto().setIcon(new ImageIcon(imagenDefaultProducto));
+			}
+
+			
+		}
+
+	}
 }

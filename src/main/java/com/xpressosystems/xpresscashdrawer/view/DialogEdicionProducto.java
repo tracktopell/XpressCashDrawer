@@ -72,6 +72,8 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         aceptar = new javax.swing.JButton();
         cancelar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        imagenProducto = new javax.swing.JLabel();
 
         jPanel1.setLayout(new java.awt.GridLayout(8, 1));
 
@@ -79,7 +81,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setText("CODIGO :");
-        jLabel1.setPreferredSize(new java.awt.Dimension(200, 19));
+        jLabel1.setPreferredSize(new java.awt.Dimension(120, 19));
         jPanel4.add(jLabel1);
 
         jTextField1.setColumns(10);
@@ -92,7 +94,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Nombre :");
-        jLabel2.setPreferredSize(new java.awt.Dimension(200, 19));
+        jLabel2.setPreferredSize(new java.awt.Dimension(120, 19));
         jPanel5.add(jLabel2);
 
         jTextField2.setColumns(25);
@@ -105,7 +107,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Linea :");
-        jLabel3.setPreferredSize(new java.awt.Dimension(200, 19));
+        jLabel3.setPreferredSize(new java.awt.Dimension(120, 19));
         jPanel6.add(jLabel3);
 
         jTextField3.setColumns(20);
@@ -118,7 +120,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Marca :");
-        jLabel4.setPreferredSize(new java.awt.Dimension(200, 19));
+        jLabel4.setPreferredSize(new java.awt.Dimension(120, 19));
         jPanel7.add(jLabel4);
 
         jTextField4.setColumns(20);
@@ -131,7 +133,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Costo :");
-        jLabel5.setPreferredSize(new java.awt.Dimension(200, 19));
+        jLabel5.setPreferredSize(new java.awt.Dimension(120, 19));
         jPanel8.add(jLabel5);
 
         jTextField5.setColumns(5);
@@ -144,7 +146,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("Precio Venta :");
-        jLabel6.setPreferredSize(new java.awt.Dimension(200, 19));
+        jLabel6.setPreferredSize(new java.awt.Dimension(120, 19));
         jPanel9.add(jLabel6);
 
         jTextField6.setColumns(5);
@@ -157,7 +159,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText("Piezas X Caja :");
-        jLabel7.setPreferredSize(new java.awt.Dimension(200, 19));
+        jLabel7.setPreferredSize(new java.awt.Dimension(120, 19));
         jPanel10.add(jLabel7);
 
         jTextField7.setColumns(3);
@@ -170,7 +172,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText("Existencia :");
-        jLabel8.setPreferredSize(new java.awt.Dimension(200, 19));
+        jLabel8.setPreferredSize(new java.awt.Dimension(120, 19));
         jPanel11.add(jLabel8);
 
         jTextField8.setColumns(3);
@@ -197,14 +199,23 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
+        jPanel2.setPreferredSize(new java.awt.Dimension(210, 10));
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        imagenProducto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel2.add(imagenProducto, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.EAST);
+
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-519)/2, (screenSize.height-288)/2, 519, 288);
+        setBounds((screenSize.width-641)/2, (screenSize.height-318)/2, 641, 318);
     }// </editor-fold>//GEN-END:initComponents
 
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aceptar;
     private javax.swing.JButton cancelar;
+    private javax.swing.JLabel imagenProducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -216,6 +227,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -270,6 +282,13 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 	 */
 	public javax.swing.JLabel getSurtirLbl() {
 		return surtirLbl;
+	}
+
+	/**
+	 * @return the imagenProducto
+	 */
+	public javax.swing.JLabel getImagenProducto() {
+		return imagenProducto;
 	}
 	
 	

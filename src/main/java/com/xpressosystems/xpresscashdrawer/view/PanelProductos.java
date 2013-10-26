@@ -6,6 +6,8 @@ package com.xpressosystems.xpresscashdrawer.view;
 
 import com.xpressosystems.xpresscashdrawer.model.DetalleProductoTableModel;
 import com.xpressosystems.xpresscashdrawer.model.DetalleVentaTableModel;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -31,6 +33,7 @@ public class PanelProductos extends javax.swing.JPanel {
 
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         codigoBuscar = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         detalleProductoJTable = new javax.swing.JTable();
@@ -42,8 +45,13 @@ public class PanelProductos extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("BUSCAR CODIGO PRODUCTO :");
+        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        jLabel1.setText("BUSCAR POR ");
         jPanel2.add(jLabel1);
+
+        jLabel2.setIcon(getBarCodeImageIcon());
+        jPanel2.add(jLabel2);
 
         codigoBuscar.setColumns(10);
         jPanel2.add(codigoBuscar);
@@ -78,6 +86,7 @@ public class PanelProductos extends javax.swing.JPanel {
     private javax.swing.JButton editar;
     private javax.swing.JButton eliminar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -126,6 +135,15 @@ public class PanelProductos extends javax.swing.JPanel {
 	 */
 	public javax.swing.JTextField getCodigoBuscar() {
 		return codigoBuscar;
+	}
+
+	private javax.swing.ImageIcon getBarCodeImageIcon(){
+		javax.swing.ImageIcon ii = null;
+		try{
+			ii = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/images/barcode_icon_52x24.png")));
+		} catch(Exception ioe){
+		}
+		return ii;
 	}
 
 }

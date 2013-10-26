@@ -75,20 +75,20 @@ public final class ProductoDAOJDBC implements ProductoDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement("SELECT CODIGO,NOMBRE,LINEA,MARCA,COSTO,PRECIO_VENTA,EXISTENCIA,PIEZAS_POR_CAJA FROM PRODUCTO"+
+			ps = conn.prepareStatement("SELECT CODIGO,NOMBRE,LINEA,MARCA,COSTO,PRECIO_VENTA,EXISTENCIA,PIEZAS_POR_CAJA FROM PRODUCTO "+
 					"WHERE CODIGO=?");
 			ps.setString(1, codigo);
 			
 			rs = ps.executeQuery();
 			if(rs.next()) {
+				x = new Producto();
+				
 				x.setCodigo	(rs.getString("CODIGO"));
 				x.setNombre	(rs.getString("NOMBRE"));
 				x.setLinea	(rs.getString("LINEA"));
-				x.setMarca	(rs.getString("MARCA"));
-				
+				x.setMarca	(rs.getString("MARCA"));				
 				x.setCosto		(rs.getDouble("COSTO"));
-				x.setPrecioVenta(rs.getDouble("PRECIO_VENTA"));
-				
+				x.setPrecioVenta(rs.getDouble("PRECIO_VENTA"));				
 				x.setExistencia (rs.getInt("EXISTENCIA"));
 				x.setExistencia (rs.getInt("PIEZAS_POR_CAJA"));								
 			}

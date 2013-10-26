@@ -9,6 +9,7 @@ import com.tracktopell.dbutil.DerbyDBInstaller;
 import com.xpressosystems.xpresscashdrawer.Main;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import org.apache.log4j.Logger;
 
 /**
@@ -19,7 +20,7 @@ public class DataSourceAdaptor {
 	private static Logger logger = Logger.getLogger(DataSourceAdaptor.class);
 	private static Connection conn = null;
 	
-	public static Connection getConnection() {
+	public static Connection getConnection() throws SQLException{
 		logger.info("->getConnection():");
 		if(conn == null) {
 			DBInstaller dbi = null;

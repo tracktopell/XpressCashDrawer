@@ -38,6 +38,7 @@ public class VentaTableModel implements TableModel{
 	}
 	
 	public VentaTableModel(List<Venta> ventaList,Hashtable<Integer,Double> ventaImporteList){
+		this.tableModelListenerList = new ArrayList<TableModelListener> ();
 		this.ventaList			= ventaList;
 		this.ventaImporteList	= ventaImporteList;
 	}

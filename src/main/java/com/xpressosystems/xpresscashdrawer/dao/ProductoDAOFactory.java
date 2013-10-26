@@ -6,18 +6,22 @@ package com.xpressosystems.xpresscashdrawer.dao;
 
 import com.xpressosystems.xpresscashdrawer.dao.jdbc.DataSourceAdaptor;
 import com.xpressosystems.xpresscashdrawer.dao.jdbc.ProductoDAOJDBC;
+import java.sql.SQLException;
 
 /**
  *
  * @author alfredo
  */
 public class ProductoDAOFactory {
-	
+
 	private static ProductoDAO productoDAO;
-	
-	public static ProductoDAO getProductoDAO(){
-		if(productoDAO == null){
-			productoDAO = new ProductoDAOJDBC(DataSourceAdaptor.getConnection());			
+
+	public static ProductoDAO getProductoDAO() {
+		if (productoDAO == null) {
+			try {
+				productoDAO = new ProductoDAOJDBC(DataSourceAdaptor.getConnection());
+			} catch (SQLException ex) {
+			}
 		}
 		return productoDAO;
 	}

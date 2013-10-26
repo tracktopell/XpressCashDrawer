@@ -402,7 +402,7 @@ public abstract class DBInstaller {
 		try {
 			connectionForCreate = createConnectionForInit();			
 		} catch (SQLException ex) {
-			
+			throw new IllegalStateException(ex.getMessage());
 		} finally {
 			return connectionForCreate;
 		}
@@ -454,10 +454,10 @@ public abstract class DBInstaller {
 			}
 		} catch (IOException ex2) {
 			ex2.printStackTrace(System.err);
-			System.exit(4);
+			//System.exit(4);
 		} catch (SQLException ex1) {
 			logger.error(ex1.getLocalizedMessage(), ex1);
-			System.exit(3);
+			//System.exit(3);
 		} finally {
 			if (connectionForCreate != null) {
 				try {
@@ -515,10 +515,10 @@ public abstract class DBInstaller {
 			}
 		} catch (IOException ex2) {
 			ex2.printStackTrace(System.err);
-			System.exit(4);
+			//System.exit(4);
 		} catch (SQLException ex1) {
 			logger.error(ex1.getLocalizedMessage(), ex1);
-			System.exit(3);
+			//System.exit(3);
 		} finally {
 			return connectionForCreate;
 		}

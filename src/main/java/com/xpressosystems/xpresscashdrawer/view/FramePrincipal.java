@@ -41,6 +41,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         ventaTerminarMenu = new javax.swing.JMenuItem();
         ventaCancelarMenu = new javax.swing.JMenuItem();
         ventaeliminarProdMenu = new javax.swing.JMenuItem();
+        configMenu = new javax.swing.JMenu();
+        negocioConfigMenu = new javax.swing.JMenuItem();
+        impresoraBTMenu = new javax.swing.JMenuItem();
+        usuarioAdminMenu = new javax.swing.JMenuItem();
+        usuarioCajaMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Caja");
@@ -92,10 +97,26 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(ventaMenu);
 
+        configMenu.setText("Configuración");
+
+        negocioConfigMenu.setText("Datos de Negocio");
+        configMenu.add(negocioConfigMenu);
+
+        impresoraBTMenu.setText("Impresora Bluetooth");
+        configMenu.add(impresoraBTMenu);
+
+        usuarioAdminMenu.setText("Contraseña Administrador");
+        configMenu.add(usuarioAdminMenu);
+
+        usuarioCajaMenu.setText("Contraseña Usuario Caja");
+        configMenu.add(usuarioCajaMenu);
+
+        jMenuBar1.add(configMenu);
+
         setJMenuBar(jMenuBar1);
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-766)/2, (screenSize.height-470)/2, 766, 470);
+        setSize(new java.awt.Dimension(766, 470));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
 	/**
@@ -134,14 +155,19 @@ public class FramePrincipal extends javax.swing.JFrame {
 	}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu archivoMenu;
+    private javax.swing.JMenu configMenu;
+    private javax.swing.JMenuItem impresoraBTMenu;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenuItem negocioConfigMenu;
     private javax.swing.JPanel panelProductos;
     private javax.swing.JPanel panelVenta;
     private javax.swing.JPanel panelVentas;
     private javax.swing.JPanel panels;
     private javax.swing.JMenuItem productosMenu;
     private javax.swing.JMenuItem salirMenu;
+    private javax.swing.JMenuItem usuarioAdminMenu;
+    private javax.swing.JMenuItem usuarioCajaMenu;
     private javax.swing.JMenuItem ventaCancelarMenu;
     private javax.swing.JMenu ventaMenu;
     private javax.swing.JMenuItem ventaNuevaMenu;
@@ -239,5 +265,40 @@ public class FramePrincipal extends javax.swing.JFrame {
 	 */
 	public javax.swing.JPanel getPanelVentas() {
 		return panelVentas;
+	}
+
+	/**
+	 * @return the impresoraBTMenu
+	 */
+	public javax.swing.JMenuItem getImpresoraBTMenu() {
+		return impresoraBTMenu;
+	}
+
+	/**
+	 * @param impresoraBTMenu the impresoraBTMenu to set
+	 */
+	public void setImpresoraBTMenu(javax.swing.JMenuItem impresoraBTMenu) {
+		this.impresoraBTMenu = impresoraBTMenu;
+	}
+
+	/**
+	 * @return the negocioConfigMenu
+	 */
+	public javax.swing.JMenuItem getNegocioConfigMenu() {
+		return negocioConfigMenu;
+	}
+
+	/**
+	 * @return the usuarioAdminMenu
+	 */
+	public javax.swing.JMenuItem getUsuarioAdminMenu() {
+		return usuarioAdminMenu;
+	}
+
+	/**
+	 * @return the usuarioCajaMenu
+	 */
+	public javax.swing.JMenuItem getUsuarioCajaMenu() {
+		return usuarioCajaMenu;
 	}
 }

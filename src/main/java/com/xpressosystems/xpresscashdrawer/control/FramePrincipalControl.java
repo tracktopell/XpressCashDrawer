@@ -4,6 +4,7 @@
  */
 package com.xpressosystems.xpresscashdrawer.control;
 
+import com.xpressosystems.xpresscashdrawer.view.DialogConfiguracionBTImpresora;
 import com.xpressosystems.xpresscashdrawer.view.FramePrincipal;
 import com.xpressosystems.xpresscashdrawer.view.PanelProductos;
 import com.xpressosystems.xpresscashdrawer.view.PanelVenta;
@@ -61,6 +62,8 @@ public class FramePrincipalControl implements ActionListener{
 		
 		framePrincipal.getVentaCancelarMenu().addActionListener(this);
 		//---------------------------------------------------
+		framePrincipal.getImpresoraBTMenu().addActionListener(this);
+		//---------------------------------------------------
 		
 		framePrincipal.setDefaultCloseOperation(framePrincipal.EXIT_ON_CLOSE);
 		
@@ -97,7 +100,9 @@ public class FramePrincipalControl implements ActionListener{
 			ventaeliminarProdMenu_actionPerformed();
 		} else if(e.getSource() == framePrincipal.getVentaCancelarMenu()){
 			ventaCancelarMenu_actionPerformed();
-		} 
+		} else if(e.getSource() == framePrincipal.getImpresoraBTMenu()){
+			impresoraBTMenu_actionPerformed();
+		}
 	}
 
 	private void ventaeliminarProdMenu_actionPerformed() {
@@ -112,6 +117,7 @@ public class FramePrincipalControl implements ActionListener{
 	}	
 
 	private void productosMenu_actionPerformed() {
+		panelProductosControl.estadoInicial();
 		((CardLayout)framePrincipal.getPanels().getLayout()).show(framePrincipal.getPanels(), "panelProductos");
 	}
 
@@ -136,5 +142,16 @@ public class FramePrincipalControl implements ActionListener{
 
 	public void setNombreNegocio(String negocio) {
 		framePrincipal.setTitle(negocio);
+	}
+
+	private DialogConfiguracionBTImpresora dialogConfiguracionBTImpresora;
+	private DialogConfiguracionBTImpresoraControl dialogConfiguracionBTImpresoraControl;	
+		
+	private void impresoraBTMenu_actionPerformed() {
+		if(dialogConfiguracionBTImpresoraControl==null){
+			dialogConfiguracionBTImpresora = new DialogConfiguracionBTImpresora(this.framePrincipal);
+			dialogConfiguracionBTImpresoraControl = new DialogConfiguracionBTImpresoraControl(dialogConfiguracionBTImpresora);
+		}
+		dialogConfiguracionBTImpresoraControl.estadoInicial();
 	}
 }

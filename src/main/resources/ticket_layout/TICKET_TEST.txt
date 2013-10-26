@@ -1,0 +1,1 @@
+--------------------------------    FECHA : ${FECHA}    HORA  : ${HORA}   PRUEBA ENVIADA A IMPRESORA     BLUETOOTH ${BTADDERSS}         CORRECTAMENTE--------------------------------

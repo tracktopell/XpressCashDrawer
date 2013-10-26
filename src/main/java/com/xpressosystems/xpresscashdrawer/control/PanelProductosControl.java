@@ -42,7 +42,7 @@ public class PanelProductosControl implements ActionListener,TableModelListener,
 		x.addTableModelListener( this);
 		panelProductos.getDetalleProductoJTable().addMouseListener(this);
 		panelProductos.getDetalleProductoJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		System.err.println("->>table columns="+panelProductos.getDetalleProductoJTable().getColumnCount());
+		//System.err.println("->>table columns="+panelProductos.getDetalleProductoJTable().getColumnCount());
 		
 		final ImporteCellRender importeCellRender = new ImporteCellRender();
 		final CantidadCellRender cantidadCellRender = new CantidadCellRender();
@@ -56,9 +56,6 @@ public class PanelProductosControl implements ActionListener,TableModelListener,
 		panelProductos.getDetalleProductoJTable().getColumnModel().getColumn(7).setCellRenderer(cantidadCellRender);		
 		
 		detalleProductoList = (x).getDetalleProductoList();
-		productoDAO = ProductoDAOFactory.getProductoDAO();
-		
-		detalleProductoList.addAll(productoDAO.getAll());
 		
 		this.panelProductos.getNuevo().addActionListener(this);
 		
@@ -68,15 +65,19 @@ public class PanelProductosControl implements ActionListener,TableModelListener,
 
 		this.panelProductos.getCodigoBuscar().addActionListener(this);
 
-		
 		df = new DecimalFormat("$ ###,###,###,##0.00");
 	}
 	
 	public void estadoInicial(){
-		if(detalleProductoList.size()>0){
+		if(productoDAO == null) {
+			productoDAO = ProductoDAOFactory.getProductoDAO();		
+		} else if(detalleProductoList.size()>0){
 			detalleProductoList.clear();
 		}
-		detalleProductoList.addAll(productoDAO.getAll());		
+		
+		List<Producto> productosList = productoDAO.getAll();		
+		System.err.println("==>>estadoInicial:productosList = "+productosList.size());
+		detalleProductoList.addAll(productosList);		
 		panelProductos.getDetalleProductoJTable().updateUI();		
 		panelProductos.getDetalleProductoJTable().getSelectionModel().clearSelection();
 	}

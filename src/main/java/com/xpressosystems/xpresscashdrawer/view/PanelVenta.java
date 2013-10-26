@@ -5,6 +5,9 @@
 package com.xpressosystems.xpresscashdrawer.view;
 
 import com.xpressosystems.xpresscashdrawer.model.DetalleVentaTableModel;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -43,7 +46,9 @@ public class PanelVenta extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("CODIGO PRODUCTO :");
+        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        jLabel1.setIcon(getBarCodeImageIcon());
         jPanel2.add(jLabel1);
 
         codigoBuscar.setColumns(10);
@@ -133,6 +138,13 @@ public class PanelVenta extends javax.swing.JPanel {
 		return total;
 	}
 
-	
+	private javax.swing.ImageIcon getBarCodeImageIcon(){
+		javax.swing.ImageIcon ii = null;
+		try{
+			ii = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/images/barcode_icon_52x24.png")));
+		} catch(Exception ioe){
+		}
+		return ii;
+	}
 
 }

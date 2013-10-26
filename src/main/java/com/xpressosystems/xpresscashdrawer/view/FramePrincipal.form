@@ -67,6 +67,33 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="configMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Configuraci&#xf3;n"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="negocioConfigMenu">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Datos de Negocio"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="impresoraBTMenu">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Impresora Bluetooth"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="usuarioAdminMenu">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Contrase&#xf1;a Administrador"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="usuarioCajaMenu">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Contrase&#xf1;a Usuario Caja"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>

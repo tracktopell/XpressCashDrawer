@@ -27,6 +27,12 @@ CREATE TABLE VENTA_DETALLE (
 	PRECIO_VENTA	DOUBLE	 NOT NULL ,
 	PRIMARY KEY (ID)
 );
+-- ===============================================================================
+CREATE TABLE PREFERENCIA (
+	ID				VARCHAR (32)	 NOT NULL ,
+	VALOR			VARCHAR (128)	 NOT NULL,
+	PRIMARY KEY (ID)
+);
 
 -- =================================== CONSTRAINTS ==============================
 ALTER TABLE VENTA_DETALLE ADD FOREIGN KEY (PRODUCTO_CODIGO)	REFERENCES PRODUCTO(CODIGO);

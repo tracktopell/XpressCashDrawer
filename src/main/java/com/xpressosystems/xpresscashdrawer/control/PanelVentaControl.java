@@ -165,14 +165,14 @@ public class PanelVentaControl implements ActionListener, TableModelListener, Mo
 			}
 
 			ventaDAO.persist(venta, detalleVentaList);
-
-			JOptionPane.showMessageDialog(FramePrincipalControl.getInstance().getFramePrincipal(), "Se guardo Correctamente", "Venta", JOptionPane.INFORMATION_MESSAGE);
 			new Thread(){
 				@Override
 				public void run() {
 					imprimirTicket(venta, detalleVentaList);			
 				}			
 			}.start();
+			
+			JOptionPane.showMessageDialog(FramePrincipalControl.getInstance().getFramePrincipal(), "Se guardo Correctamente", "Venta", JOptionPane.INFORMATION_MESSAGE);
 			
 			estadoInicial();
 			panelVenta.getCodigoBuscar().requestFocus();

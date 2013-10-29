@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+
+  <programGroup defaultName="Perfumeria Marlen CAJA"
+  location="Perfumeria_Marlen"/>
+
+  <shortcut
+     name="PMarlen"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="$INSTALL_PATH/PerfumeriaMarlen_app.jar"
+     commandLine=""
+     workingDirectory="$INSTALL_PATH"
+     description="PMalren"
+     iconFile="$INSTALL_PATH/Logo_1.png"
+     iconIndex="0"
+     type="Application"
+     encoding="UTF-8"
+     terminal="false"
+     KdeSubstUID="false"
+     initialState="normal">
+     <createForPack name="Core"/>
+  </shortcut>
+
+</shortcuts>

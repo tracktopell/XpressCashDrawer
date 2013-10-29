@@ -5,7 +5,10 @@
 package com.xpressosystems.xpresscashdrawer.ticket.bluetooth;
 
 import com.xpressosystems.xpresscashdrawer.control.ApplicationLogic;
+import com.xpressosystems.xpresscashdrawer.dao.ProductoDAO;
+import com.xpressosystems.xpresscashdrawer.dao.ProductoDAOFactory;
 import com.xpressosystems.xpresscashdrawer.model.DetalleVenta;
+import com.xpressosystems.xpresscashdrawer.model.Producto;
 import com.xpressosystems.xpresscashdrawer.model.Venta;
 import com.xpressosystems.xpresscashdrawer.ticket.NumeroCastellano;
 import com.xpressosystems.xpresscashdrawer.ticket.TicketPrinteService;
@@ -59,7 +62,7 @@ public class TicketBlueToothPrinter implements TicketPrinteService {
     public Object generateTicket(Venta pedidoVenta,List<DetalleVenta> pedidoVentaDetalleCollection,HashMap<String,String> extraInformation) throws IOException {
         String tiketPrinted = null;
         PrintStream psPrintTicket = null;
-        
+        ProductoDAO productoDAO=null;
         
         InputStream is = TicketBlueToothPrinter.class.getResourceAsStream(TICKET_LAYOUT_FILE);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -69,7 +72,7 @@ public class TicketBlueToothPrinter implements TicketPrinteService {
             Date fecha = new Date();
             tiketPrinted = "TICKET_"+pedidoVenta.getId()+"_"+sdf_fecha_full.format(fecha)+".TXT";
             psPrintTicket = new PrintStream(new File(tiketPrinted),"ISO-8859-1");
-
+			productoDAO = ProductoDAOFactory.getProductoDAO();
             HashMap<String, String> staticVars = new HashMap();
             staticVars.put("${FECHA}", sdf_fecha.format(fecha));
             staticVars.put("${HORA}", sdf_hora.format(fecha));
@@ -79,26 +82,26 @@ public class TicketBlueToothPrinter implements TicketPrinteService {
 
             List<String> nombreEmpresaList = justifyText(nombreEmpresa, MAX_CHARS_PER_COLUMN - 2 );
 
-            staticVars.put("${NOMBRE_EMRPESA_0}", nombreEmpresaList.get(0));
+            staticVars.put("${NOMBRE_EMRPESA_0}", alignTextCenter(nombreEmpresaList.get(0),MAX_CHARS_PER_COLUMN - 2));
             if (nombreEmpresaList.size() > 1) {
-                staticVars.put("?{NOMBRE_EMRPESA_1}", nombreEmpresaList.get(1));
+                staticVars.put("?{NOMBRE_EMRPESA_1}", alignTextCenter(nombreEmpresaList.get(1),MAX_CHARS_PER_COLUMN - 2));
             }
             
             String direccion = applicationLogic.getDireccion();
 
             List<String> direccionList = justifyText(direccion, MAX_CHARS_PER_COLUMN - 2 );
 
-            staticVars.put("${DIRECCION_0}", direccionList.get(0));
+            staticVars.put("${DIRECCION_0}", alignTextCenter(direccionList.get(0),MAX_CHARS_PER_COLUMN - 2));
             if (direccionList.size() > 1) {
-                staticVars.put("?{DIRECCION_1}", direccionList.get(1));
+                staticVars.put("?{DIRECCION_1}", alignTextCenter(direccionList.get(1),MAX_CHARS_PER_COLUMN - 2));
             }
             if (direccionList.size() > 2) {
-                staticVars.put("?{DIRECCION_2}", direccionList.get(2));
+                staticVars.put("?{DIRECCION_2}", alignTextCenter(direccionList.get(2),MAX_CHARS_PER_COLUMN - 2));
             }
             if (direccionList.size() > 3) {
-                staticVars.put("?{DIRECCION_3}", direccionList.get(3));
+                staticVars.put("?{DIRECCION_3}", alignTextCenter(direccionList.get(3),MAX_CHARS_PER_COLUMN - 2));
             }
-			staticVars.put("${TELEFONO_0}", applicationLogic.getTelefonos());
+			staticVars.put("${TELEFONO_0}", alignTextCenter(applicationLogic.getTelefonos(),MAX_CHARS_PER_COLUMN - 2));
 
             boolean skipLine = false;
             boolean detailStart = false;
@@ -145,14 +148,16 @@ public class TicketBlueToothPrinter implements TicketPrinteService {
                 for (int i = 0; i < numIter; i++) {
 
                     if (expandDetail) {
+						
+						Producto prod=productoDAO.getProducto(pedidoVentaDetalleCollection.get(i).getProductoCodigo());
+						
 						//${CODIGO } ${PRODUCTO}
 						//   ${CANT} *  ${PRECIO}  ${IMP}
-						staticVars.put("${CODIGO}", alignTextRigth(pedidoVentaDetalleCollection.get(i).getProductoCodigo(),14));
-                        staticVars.put("${PRODUCTO}", alignTextRigth(pedidoVentaDetalleCollection.get(i).getProductoCodigo(),16));
-                        
 						staticVars.put("${CANT}"    , alignTextRigth(df_6.format(pedidoVentaDetalleCollection.get(i).getCantidad()),4));
-                        String productoPresentacion = pedidoVentaDetalleCollection.get(i).getProductoCodigo();
+                        staticVars.put("${PRODUCTO}", alignTextLeft(prod.getNombre(),25));
                         
+						staticVars.put("${CODIGO}", alignTextRigth(pedidoVentaDetalleCollection.get(i).getProductoCodigo(),14));                        
+						
                         importe  = pedidoVentaDetalleCollection.get(i).getCantidad() * pedidoVentaDetalleCollection.get(i).getPrecioVenta();
                         sum_importe += importe;
                         sum_desc += desc;
@@ -232,7 +237,26 @@ public class TicketBlueToothPrinter implements TicketPrinteService {
 
         return tiketPrinted;
     }
-    
+
+	private static String alignTextCenter(String text, int maxPerColumn) {
+        try{
+			int length  = text.trim().length(); 
+			int lengthL = (maxPerColumn - length)/2;
+			int lengthR = (maxPerColumn - length) - lengthL;
+			
+            if(length<maxPerColumn){                
+                return SPACES.substring(0,lengthL)+
+                        text +
+						SPACES.substring(0,lengthR);
+            }else {
+                return text.trim().substring(0, maxPerColumn);
+            }
+        }catch(Exception ex){
+            System.err.println("\t==>>> alignTextRigth: ->"+text.trim()+"<-["+text.trim().length()+"],"+maxPerColumn+":"+ex.getMessage());
+            return text.trim();
+        }
+    }
+
     private static String alignTextRigth(String text, int maxPerColumn) {
         try{
             if(text.trim().length()<maxPerColumn){

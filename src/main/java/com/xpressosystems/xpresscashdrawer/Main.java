@@ -4,6 +4,7 @@
  */
 package com.xpressosystems.xpresscashdrawer;
 
+import com.xpressosystems.xpresscashdrawer.control.ApplicationLogic;
 import com.xpressosystems.xpresscashdrawer.control.FramePrincipalControl;
 import com.xpressosystems.xpresscashdrawer.dao.jdbc.DataSourceAdaptor;
 import java.sql.Connection;
@@ -26,6 +27,8 @@ public class Main {
 		FramePrincipalControl framePrincipalControl = null;
 		
 		isSingleInstanceRunning();
+		
+		ApplicationLogic.getInstance().needsUpdateApplciation();
 		
 		try {
 			framePrincipalControl = FramePrincipalControl.getInstance();

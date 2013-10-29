@@ -1,0 +1,37 @@
+CONTRATO DE LICENCIA DE USUARIO FINAL
+(CLUF)
+Aviso al usuario: Este es un contrato. Lea detenidamente este documento antes de instalar y usar el
+Software. Al usar este Software, acepta los términos de esta licencia de software y se obliga a cumplir
+los términos de este contrato. Si no acepta, no instale ni use este Software.
+1. Definiciones “Xpress Cashdrawer” se refieren al paquete de software adjunto y de aquí en adelante se les denominará el “Software”.
+2. Licencia
+Al instalar y usar el Software, acepta que Xpresso Systems. (de aquí en adelante XPRESSOSYSTEMS) le otorgue los siguientes derechos:
+- El derecho de instalar el Software en cualquiera de las computadoras que use, ya sea para uso personal o comercial. 
+XPRESSOSYSTEMS conserva los derechos de título del Software y del Software y cualquier otro derecho que no se le otorgue a usted 
+expresamente en este Contrato. Audio-Technica posee todos los derechos de autor, tanto
+federales como internacionales. XPRESSOSYSTEMS otorga el Software bajo licencia, no lo vende,
+conforme a los términos y condiciones de este Contrato.
+- El derecho de crear una copia de seguridad del Software, siempre que reproduzca en dicha
+copia todos los avisos de derechos de autor y cualquier otra leyenda de propiedad que contenga
+el Software original.
+3. Restricciones
+Se le prohíbe:
+- descompilar, modificar, adaptar, realizar ingeniería inversa, descomponero traducir el Software
+o crear trabajos derivados en base al Software o los materiales educativos;
+- arrendar, revender o transferir el Software a cualquier lugar, o exportarlo (o reexportarlo) a
+cualquier país.
+- redistribuir el Software, en su totalidad o en parte.
+4. Derechos de autor
+El Software es propiedad de XPRESSOSYSTEMS
+y está protegido por las leyes de propiedad intelectual de los Estados Unidos y por las disposiciones de los trata
+dos internacionales. Por consiguiente, debe manejar el Software como cualquier otro material protegido por el derecho de
+autor (por ejemplo, un libro, un disco compacto o una cinta). Cualquier reproducción o redistribución del Software o parte de 
+éste, con excepción de lo que se autoriza expresamente eneste Contrato de licencia, es una violación de nuestros derechos legales.
+5. Garantías limitadas
+XPRESSOSYSTEMS garantiza que el Software por un período de 6 meses a contar de la fecha de compra (según el recibo original) funcionará,
+en conformidad con la documentación que seproporciona, bajo las siguientes circunstancias:
+a. si se usa con los sistemas operativos compatibles y con la configuración de hardware recomendada;
+b. si los medios mediante los cuales se proporciona el Software (CD-ROM) no tienen defectos de materiales ni de mano de obra bajo 
+condiciones de uso normales.
+8. Generalidades
+Este Contrato se rige por las leyes Mexico. 

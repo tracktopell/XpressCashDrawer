@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -161,6 +162,9 @@ public class ApplicationLogic {
 		}
 		try {
 			extractFolder(FILE_APP_PACKAGE);
+			JOptionPane.showMessageDialog(null, "Se ha actualizado la Aplicación, \nPor favor reinicie nuevamente", 
+					"Actualización", JOptionPane.INFORMATION_MESSAGE);
+			System.exit(2);
 		} catch (IOException ex) {
 			throw new IllegalStateException("Can't extract & deflate UPDATE data paclkage:"+ex.getMessage());
 		}

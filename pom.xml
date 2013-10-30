@@ -211,6 +211,24 @@
 									</tasks>
 								</configuration>
 							</execution>
+							<execution>
+								<id>preprare-bins-installer</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<echo message="======================= preprare-bins-installer , in verify phase, basedir=${basedir}, create ZIP for UPDATE ==============>>>"/>
+										<zip destfile="${project.build.directory}/UPDATE_BUILD.zip">
+											<zipfileset dir="${staging.dir}/dependency-jars"	prefix="dependency-jars/"	 includes="*.jar"/>
+											<zipfileset dir="${staging.dir}/"					includes="run*.*"/>
+											<zipfileset dir="${staging.dir}/../"				includes="XpressCashDrawer.jar"/>
+										</zip>
+									</tasks>
+								</configuration>
+							</execution>
+
 						</executions>
 					</plugin>
 					

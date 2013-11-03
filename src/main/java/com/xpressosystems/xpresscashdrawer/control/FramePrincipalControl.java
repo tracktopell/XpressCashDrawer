@@ -40,6 +40,8 @@ public class FramePrincipalControl implements ActionListener{
 		
 		framePrincipal = new FramePrincipal();
 		
+		framePrincipal.setTitle("XpressCashdrawer ["+ApplicationLogic.version+"]- "+ApplicationLogic.getInstance().getNombreNegocio());
+		
 		panelVentaControl  = new PanelVentaControl ((PanelVenta)framePrincipal.getPanelVenta());
 		
 		panelProductosControl = new PanelProductosControl((PanelProductos)framePrincipal.getPanelProductos()) ;
@@ -72,6 +74,7 @@ public class FramePrincipalControl implements ActionListener{
 	public void estadoInicial() {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				
 				framePrincipal.setVisible(true);
 				panelVentaControl.estadoInicial();
 			}
@@ -139,11 +142,7 @@ public class FramePrincipalControl implements ActionListener{
 	private void ventaTerminar_actionPerformed() {
 		((CardLayout)framePrincipal.getPanels().getLayout()).show(framePrincipal.getPanels(), "panelVenta");
 	}	
-
-	public void setNombreNegocio(String negocio) {
-		framePrincipal.setTitle(negocio);
-	}
-
+	
 	private DialogConfiguracionBTImpresora dialogConfiguracionBTImpresora;
 	private DialogConfiguracionBTImpresoraControl dialogConfiguracionBTImpresoraControl;	
 		

@@ -6,9 +6,10 @@ package com.xpressosystems.xpresscashdrawer;
 
 import com.xpressosystems.xpresscashdrawer.control.ApplicationLogic;
 import com.xpressosystems.xpresscashdrawer.control.FramePrincipalControl;
+import com.xpressosystems.xpresscashdrawer.control.UpadateApplicationJFrameControl;
 import com.xpressosystems.xpresscashdrawer.dao.jdbc.DataSourceAdaptor;
+import com.xpressosystems.xpresscashdrawer.view.UpadateApplicationJFrame;
 import java.sql.Connection;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
@@ -28,13 +29,14 @@ public class Main {
 		
 		isSingleInstanceRunning();
 		
-		ApplicationLogic.getInstance().needsUpdateApplciation();
+		if( ApplicationLogic.getInstance().needsUpdateApplciation()) {
+			UpadateApplicationJFrame uaf = new UpadateApplicationJFrame();
+			UpadateApplicationJFrameControl uafc = new UpadateApplicationJFrameControl(uaf);
+			uafc.estadoInicial();
+		}
 		
 		try {
 			framePrincipalControl = FramePrincipalControl.getInstance();
-			
-			framePrincipalControl.setNombreNegocio("xpresscashdrawer store");
-			
 			framePrincipalControl.estadoInicial();
 		} catch (Exception e) {
 			e.printStackTrace(System.err);

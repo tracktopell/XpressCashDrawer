@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
@@ -29,10 +30,10 @@ import javax.swing.JOptionPane;
  * @author Softtek
  */
 public class ApplicationLogic {
-	private static final String version = "0.9.10";
-	private static final String ULR_VERSION_FILE = "http://www.xpressosystems.com/xcd/version.txt";
-	private static final String ULR_APP_PACKAGE  = "http://www.xpressosystems.com/xcd/lastUpdate.zip";
-	private static final String FILE_APP_PACKAGE = "./lastUpdate.zip";
+	public  static final String version = "0.9.11";
+	private static final String ULR_VERSION_FILE = "http://dulcesaga.com.mx/xcd/version.txt";
+	private static final String ULR_APP_PACKAGE  = "http://dulcesaga.com.mx/xcd/UPDATE_BUILD.zip";
+	private static final String FILE_APP_PACKAGE = "./UPDATE_BUILD.zip";
 	
 	private static final String VERSION_PROPERTY = "xpresscashdrawer.version";
 	
@@ -141,25 +142,71 @@ public class ApplicationLogic {
 		return updateApp;
 	}
 	
-	private void updateApplication() {
+	public void updateApplication(final UpdateApplicationListener ual) {
+		new Thread(){
+
+			@Override
+			public void run() {
+				downloadApplication(ual);
+			}
+		}.start();
+	}
+	
+	public void cacellUpdateApplication() {
+		keepDownlaod = false;
+	}
+	
+	private boolean keepDownlaod;
+	
+	private void downloadApplication(final UpdateApplicationListener ual) {
 		URL url=null;
 		BufferedReader br = null;
 		InputStream is = null;
+		HttpURLConnection conn = null;
+		
 		try{
 			url = new URL(ULR_APP_PACKAGE);
-			is = url.openStream();
+			conn = (HttpURLConnection)url.openConnection();
+			int length = conn.getContentLength();
+			is = conn.getInputStream();
 			FileOutputStream fos = new FileOutputStream(FILE_APP_PACKAGE);
-			byte[] buffer = new byte[1024 * 32];
+			byte[] buffer = new byte[1024 * 16];
 			int r = -1;
+			int t= 0;
+			keepDownlaod = true;
 			while ((r = is.read(buffer, 0, buffer.length)) != -1) {
+				if(!keepDownlaod){
+					int resp = JOptionPane.showConfirmDialog(null, "¿Desea cancelar la descarga ?", "Cancelar", 
+							JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+					if(resp == JOptionPane.YES_OPTION){
+						break;
+					} else {
+						keepDownlaod = true;
+					}
+				}
+				t += r;
 				fos.write(buffer, 0, r);
 				fos.flush();
+				int advance = (100 * t) / length;
+				System.err.print("Downloaded:\t"+advance+" % \r");
+				ual.updateProgress(advance);				
 			}
+			System.err.println("");
+			System.err.println("finished");
 			is.close();
 			fos.close();
+			if(!keepDownlaod){
+				throw new IllegalStateException("Update Canceled");
+			} else {
+				extractFolder(FILE_APP_PACKAGE);
+				JOptionPane.showMessageDialog(null, "Se ha actualizado la Aplicación, \nReinicie por favor.", 
+						"Actualización", JOptionPane.INFORMATION_MESSAGE);
+				//System.exit(2);			
+			}
 		} catch (IOException ex) {
 			throw new IllegalStateException("Can't download UPDATE data package:"+ex.getMessage());
 		}
+		/*
 		try {
 			extractFolder(FILE_APP_PACKAGE);
 			JOptionPane.showMessageDialog(null, "Se ha actualizado la Aplicación, \nPor favor reinicie nuevamente", 
@@ -168,7 +215,7 @@ public class ApplicationLogic {
 		} catch (IOException ex) {
 			throw new IllegalStateException("Can't extract & deflate UPDATE data paclkage:"+ex.getMessage());
 		}
-
+		*/
 	}
 
 	private void extractFolder(String zipFile) throws ZipException, IOException {
@@ -182,11 +229,13 @@ public class ApplicationLogic {
 		Enumeration zipFileEntries = zip.entries();
 
 		// Process each entry
+		System.err.println("-> extracting :");
 		while (zipFileEntries.hasMoreElements()) {
 			// grab a zip file entry
 			ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
 			String currentEntry = entry.getName();
 			File destFile = new File(destPathToInflate, currentEntry);
+			System.err.println("-> inflating :"+destFile.getPath());
 			//destFile = new File(newPath, destFile.getName());
 			File destinationParent = destFile.getParentFile();
 
@@ -213,6 +262,23 @@ public class ApplicationLogic {
 				dest.close();
 				is.close();
 			}
+		}
+		System.err.println("-> OK, finish extracting.");
+	}
+
+	public boolean canDownlaodUpdateApplication() {
+		try {
+			URL  url = new URL(ULR_APP_PACKAGE);
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			int length = conn.getContentLength();
+			if(length > 1024*1024){
+				return true;
+			} else{
+				return false;
+			}
+		} catch(Exception ex){
+			ex.printStackTrace(System.err);
+			return false;
 		}
 	}
 }

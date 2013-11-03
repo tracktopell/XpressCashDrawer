@@ -4,7 +4,7 @@
 
 	<groupId>com.xpressosystems</groupId>
 	<artifactId>XpressCashDrawer</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.9.11</version>
 	<packaging>jar</packaging>
 
 	<name>XpressCashDrawer</name>
@@ -19,7 +19,6 @@
 		<maven_build_timestamp>${maven.build.timestamp}</maven_build_timestamp>
 		<staging.dir>${project.build.directory}/staging</staging.dir>
 		<izpack-standalone.version>4.3.1</izpack-standalone.version>
-
 	</properties>
     <!--
 	<build>
@@ -123,6 +122,14 @@
 			<build>
                 
 				<finalName>${project.name}</finalName>
+				
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+				
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -170,10 +177,10 @@
 					</plugin>
 										
 					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.1</version>
-						<executions>
-                            							
+						<version>1.7</version>
+						<executions>			
 							<execution>
 								<id>clean-my-dirty-space</id>
 								<phase>post-clean</phase>
@@ -181,14 +188,14 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<target>
 										<echo message="======================= clean-my-dirty-space, in post-clean phase ==============>>>"/>
 										<!--
 										<delete>
 											<fileset dir="${basedir}" includes=""/>
 										</delete>
 										-->
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 							
@@ -200,7 +207,7 @@
 								</goals>
 								
 								<configuration>
-									<tasks>
+									<target>
 										<echo message="======================= create-staging-area, in process-resources phase ==============>>>"/>
 										<copy todir="${staging.dir}">
 											<fileset dir="${basedir}/src/izpack" />
@@ -208,31 +215,76 @@
 										<copy todir="${staging.dir}/Productos">
 											<fileset dir="${basedir}/Productos" />
 										</copy>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 							<execution>
 								<id>preprare-bins-installer</id>
-								<phase>verify</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
-										<echo message="======================= preprare-bins-installer , in verify phase, basedir=${basedir}, create ZIP for UPDATE ==============>>>"/>
+									<target>
+										<echo message="======================= preprare-bins-installer , in package phase, basedir=${basedir}, create ZIP for UPDATE ==============>>>"/>
 										<zip destfile="${project.build.directory}/UPDATE_BUILD.zip">
 											<zipfileset dir="${staging.dir}/dependency-jars"	prefix="dependency-jars/"	 includes="*.jar"/>
 											<zipfileset dir="${staging.dir}/"					includes="run*.*"/>
 											<zipfileset dir="${staging.dir}/../"				includes="XpressCashDrawer.jar"/>
 										</zip>
-									</tasks>
+									</target>
 								</configuration>
 							</execution>
 
+							<execution>
+								<id>upload-files</id>
+								<phase>install</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<echo message="=======================ANT Task in install phase, uploading (${project.name}-standard.jar,UPDATE_BUILD.zip,version.txt) to user accesible site ==============>>>"/>
+										
+										<ftp   server="dulcesaga.com.mx"
+											   port="21"
+											   remotedir="/domains/dulcesaga.com.mx/public_html/xcd"
+											   userid="dulcesag"
+											   password="0Yl8c7v1vR"
+											   passive="yes"
+											   depends="yes"
+											   binary="yes">
+											
+											<fileset dir="${project.build.directory}">
+												<include name="UPDATE_BUILD.zip"/>
+											</fileset>
+											<fileset dir="${project.build.directory}">
+												<include name="${project.name}-standard.jar"/>
+											</fileset>
+											<fileset dir="${project.build.directory}/classes">
+												<include name="version.txt"/>
+											</fileset>
+										</ftp>
+									</target>
+								</configuration>
+							</execution>
 						</executions>
+						
+						<dependencies>
+							<dependency>
+								<groupId>commons-net</groupId>
+								<artifactId>commons-net</artifactId>
+								<version>1.4.1</version>
+							</dependency>
+							<dependency>
+								<groupId>org.apache.ant</groupId>
+								<artifactId>ant-commons-net</artifactId>
+								<version>1.8.1</version>
+							</dependency>
+						</dependencies>
 					</plugin>
 					
- 					<plugin>
+					<plugin>
 						<groupId>org.codehaus.izpack</groupId>
 						<artifactId>izpack-maven-plugin</artifactId>
 						<version>1.0-alpha-5</version>

@@ -36,10 +36,11 @@ import javax.swing.JOptionPane;
  * @author Softtek
  */
 public class ApplicationLogic {
-	public  static final String _version = null;
 	private static final String ULR_VERSION_FILE = "http://dulcesaga.com.mx/xcd/version.txt";
 	private static final String ULR_APP_PACKAGE  = "http://dulcesaga.com.mx/xcd/UPDATE_BUILD.zip";
 	private static final String FILE_APP_PACKAGE = "./UPDATE_BUILD.zip";
+	
+	private static String _version = null;
 	
 	private static final String VERSION_PROPERTY = "xpresscashdrawer.version";
 	private static boolean adminLogedIn = false;
@@ -428,6 +429,7 @@ public class ApplicationLogic {
 			Properties porpVersion = new Properties();
 			try {
 				porpVersion.load(getClass().getResourceAsStream("/version.properties"));
+				_version = porpVersion.getProperty("xpresscashdrawer.version");
 			} catch (IOException ex) {
 				ex.printStackTrace(System.err);
 			}

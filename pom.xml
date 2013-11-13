@@ -4,7 +4,7 @@
 
 	<groupId>com.xpressosystems</groupId>
 	<artifactId>XpressCashDrawer</artifactId>
-	<version>0.9.13</version>
+	<version>0.9.14</version>
 	<packaging>jar</packaging>
 
 	<name>XpressCashDrawer</name>
@@ -110,6 +110,14 @@
 		</dependency>
 		
 	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
 	<profiles>		
 		
 		<profile>
@@ -122,14 +130,14 @@
 			<build>
                 
 				<finalName>${project.name}</finalName>
-				
+				<!--
 				<resources>
 					<resource>
 						<directory>src/main/resources</directory>
 						<filtering>true</filtering>
 					</resource>
 				</resources>
-				
+				-->
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>

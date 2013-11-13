@@ -40,7 +40,7 @@ public class FramePrincipalControl implements ActionListener{
 		
 		framePrincipal = new FramePrincipal();
 		
-		framePrincipal.setTitle("XpressCashdrawer ["+ApplicationLogic.version+"]- "+ApplicationLogic.getInstance().getNombreNegocio());
+		framePrincipal.setTitle("XpressCashdrawer ["+ApplicationLogic.getInstance().getVersion()+"]- "+ApplicationLogic.getInstance().getNombreNegocio());
 		
 		panelVentaControl  = new PanelVentaControl ((PanelVenta)framePrincipal.getPanelVenta());
 		
@@ -64,17 +64,32 @@ public class FramePrincipalControl implements ActionListener{
 		
 		framePrincipal.getVentaCancelarMenu().addActionListener(this);
 		//---------------------------------------------------
+		
+		framePrincipal.getNegocioConfigMenu().addActionListener(this);
+
+		framePrincipal.getUsuarioAdminMenu().addActionListener(this);
+
+		framePrincipal.getUsuarioCajaMenu().addActionListener(this);
+
 		framePrincipal.getImpresoraBTMenu().addActionListener(this);
 		//---------------------------------------------------
 		
 		framePrincipal.setDefaultCloseOperation(framePrincipal.EXIT_ON_CLOSE);
 		
+		
 	}
 	
 	public void estadoInicial() {
 		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				
+			public void run() {				
+				if(ApplicationLogic.getInstance().isAdminLogedIn()){
+					framePrincipal.getConfigMenu().setEnabled(true);
+					framePrincipal.getProductosMenu().setEnabled(true);
+				}else{					
+					framePrincipal.getConfigMenu().setEnabled(false);
+					framePrincipal.getProductosMenu().setEnabled(false);
+				}
+
 				framePrincipal.setVisible(true);
 				panelVentaControl.estadoInicial();
 			}
@@ -103,9 +118,16 @@ public class FramePrincipalControl implements ActionListener{
 			ventaeliminarProdMenu_actionPerformed();
 		} else if(e.getSource() == framePrincipal.getVentaCancelarMenu()){
 			ventaCancelarMenu_actionPerformed();
+		} else if(e.getSource() == framePrincipal.getNegocioConfigMenu()){
+			negocioConfigMenu_actionPerformed();
+		} else if(e.getSource() == framePrincipal.getUsuarioAdminMenu()){
+			usuarioAdminMenu_actionPerformed();
+		} else if(e.getSource() == framePrincipal.getUsuarioCajaMenu()){
+			usuarioCajaMenu_actionPerformed();
 		} else if(e.getSource() == framePrincipal.getImpresoraBTMenu()){
 			impresoraBTMenu_actionPerformed();
 		}
+		
 	}
 
 	private void ventaeliminarProdMenu_actionPerformed() {
@@ -143,14 +165,21 @@ public class FramePrincipalControl implements ActionListener{
 		((CardLayout)framePrincipal.getPanels().getLayout()).show(framePrincipal.getPanels(), "panelVenta");
 	}	
 	
-	private DialogConfiguracionBTImpresora dialogConfiguracionBTImpresora;
-	private DialogConfiguracionBTImpresoraControl dialogConfiguracionBTImpresoraControl;	
-		
-	private void impresoraBTMenu_actionPerformed() {
-		if(dialogConfiguracionBTImpresoraControl==null){
-			dialogConfiguracionBTImpresora = new DialogConfiguracionBTImpresora(this.framePrincipal);
-			dialogConfiguracionBTImpresoraControl = new DialogConfiguracionBTImpresoraControl(dialogConfiguracionBTImpresora);
-		}
-		dialogConfiguracionBTImpresoraControl.estadoInicial();
+	private void negocioConfigMenu_actionPerformed() {
+		DialogConfiguracionSistemaControl.getInstance(framePrincipal).estadoInicial();
 	}
+	
+	private void impresoraBTMenu_actionPerformed() {
+		DialogConfiguracionBTImpresoraControl.getInstance(framePrincipal).estadoInicial();		
+	}
+
+	private void usuarioAdminMenu_actionPerformed() {
+		DialogConfiguracionPasswordControl.getInstance(framePrincipal,
+				DialogConfiguracionPasswordControl.UPDATE_FOR_ADMIN).estadoInicial();
+	}
+
+	private void usuarioCajaMenu_actionPerformed() {
+		DialogConfiguracionPasswordControl.getInstance(framePrincipal,
+				DialogConfiguracionPasswordControl.UPDATE_FOR_USER).estadoInicial();
+	}	
 }

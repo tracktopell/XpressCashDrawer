@@ -4,7 +4,7 @@
 
 	<groupId>com.xpressosystems</groupId>
 	<artifactId>XpressCashDrawer</artifactId>
-	<version>0.9.11</version>
+	<version>0.9.13</version>
 	<packaging>jar</packaging>
 
 	<name>XpressCashDrawer</name>
@@ -211,6 +211,9 @@
 										<echo message="======================= create-staging-area, in process-resources phase ==============>>>"/>
 										<copy todir="${staging.dir}">
 											<fileset dir="${basedir}/src/izpack" />
+										</copy>
+										<copy todir="${staging.dir}">
+											<fileset file="${project.build.directory}/classes/Readme.txt" />
 										</copy>
 										<copy todir="${staging.dir}/Productos">
 											<fileset dir="${basedir}/Productos" />

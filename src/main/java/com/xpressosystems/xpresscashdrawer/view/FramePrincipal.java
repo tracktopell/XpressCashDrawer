@@ -301,4 +301,11 @@ public class FramePrincipal extends javax.swing.JFrame {
 	public javax.swing.JMenuItem getUsuarioCajaMenu() {
 		return usuarioCajaMenu;
 	}
+
+	/**
+	 * @return the configMenu
+	 */
+	public javax.swing.JMenu getConfigMenu() {
+		return configMenu;
+	}
 }

@@ -16,10 +16,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -30,17 +36,24 @@ import javax.swing.JOptionPane;
  * @author Softtek
  */
 public class ApplicationLogic {
-	public  static final String version = "0.9.11";
+	public  static final String _version = null;
 	private static final String ULR_VERSION_FILE = "http://dulcesaga.com.mx/xcd/version.txt";
 	private static final String ULR_APP_PACKAGE  = "http://dulcesaga.com.mx/xcd/UPDATE_BUILD.zip";
 	private static final String FILE_APP_PACKAGE = "./UPDATE_BUILD.zip";
 	
 	private static final String VERSION_PROPERTY = "xpresscashdrawer.version";
+	private static boolean adminLogedIn = false;
 	
 	private static ApplicationLogic instance;
 	private static PreferenciaDAO preferenciaDAO;
 	private ApplicationLogic(){	
 	}
+
+	public static boolean isAdminLogedIn() {
+		return adminLogedIn;
+	}
+	
+	
 
 	public String getNombreNegocio() {
 		if(preferenciaDAO == null){
@@ -50,6 +63,18 @@ public class ApplicationLogic {
 		return preferencia.getValor();
 	}
 
+	public void setNombreNegocio(String nombreNegocio) {
+		if(preferenciaDAO == null){
+			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
+		}
+		Preferencia preferencia = new Preferencia("NOMBRE_NEGOCIO",nombreNegocio);
+		try {
+			preferenciaDAO.edit(preferencia);
+		} catch (EntidadInexistenteException ex) {
+			
+		}
+	}
+
 	public String getDireccion() {
 		if(preferenciaDAO == null){
 			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
@@ -57,13 +82,36 @@ public class ApplicationLogic {
 		Preferencia preferencia = preferenciaDAO.getPreferencia("DIRECCION_NEGOCIO");
 		return preferencia.getValor();
 	}
+	
+	public void setDireccion(String direccion) {
+		if(preferenciaDAO == null){
+			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
+		}
+		Preferencia preferencia = new Preferencia("DIRECCION_NEGOCIO",direccion);
+		try {
+			preferenciaDAO.edit(preferencia);
+		} catch (EntidadInexistenteException ex) {
+			
+		}
+	}
 
 	public String getTelefonos() {
-		if(preferenciaDAO == null){
+	if(preferenciaDAO == null){
 			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
 		}
 		Preferencia preferencia = preferenciaDAO.getPreferencia("TELEFONOS_NEGOCIO");
 		return preferencia.getValor();
+	}
+	public void setTelefonos(String telefonos) {
+		if(preferenciaDAO == null){
+			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
+		}
+		Preferencia preferencia = new Preferencia("TELEFONOS_NEGOCIO",telefonos);
+		try {
+			preferenciaDAO.edit(preferencia);
+		} catch (EntidadInexistenteException ex) {
+			
+		}
 	}
 
 	public String getCliente() {
@@ -72,6 +120,36 @@ public class ApplicationLogic {
 		}
 		Preferencia preferencia = preferenciaDAO.getPreferencia("CLIENTE_DEFAULT");
 		return preferencia.getValor();
+	}
+	public void setCliente(String cliente) {
+		if(preferenciaDAO == null){
+			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
+		}
+		Preferencia preferencia = new Preferencia("CLIENTE_DEFAULT",cliente);
+		try {
+			preferenciaDAO.edit(preferencia);
+		} catch (EntidadInexistenteException ex) {
+			
+		}
+	}
+
+	public String getEmail() {
+		if(preferenciaDAO == null){
+			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
+		}
+		Preferencia preferencia = preferenciaDAO.getPreferencia("EMAIL_NEGOCIO");
+		return preferencia.getValor();
+	}
+	public void setEmail(String email) {
+		if(preferenciaDAO == null){
+			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
+		}
+		Preferencia preferencia = new Preferencia("EMAIL_NEGOCIO",email);
+		try {
+			preferenciaDAO.edit(preferencia);
+		} catch (EntidadInexistenteException ex) {
+			
+		}
 	}
 
 	public String getBTImpresora() {
@@ -126,10 +204,15 @@ public class ApplicationLogic {
 		try{
 			while((lineRead = br.readLine()) != null) {
 				if(lineRead.contains(VERSION_PROPERTY)){
-					System.err.println("->needsUpdateApplciation:lineRead="+lineRead);
+					
 					String[] propValue = lineRead.split("=");
 					String versionReadOfLine = propValue[1]; 
-					if(versionReadOfLine.compareTo(version)>0){
+					
+					System.err.println("->needsUpdateApplciation:lineRead="+lineRead+", versionReadOfLine="+versionReadOfLine);
+					System.err.println("->needsUpdateApplciation:version ="+getVersion());
+					System.err.println("->result ? ="+versionReadOfLine.compareTo(getVersion()));
+					
+					if(versionReadOfLine.compareTo(getVersion())>0){
 						System.err.println("->needsUpdateApplciation: Ok, update!");
 						return true;
 					}
@@ -142,7 +225,7 @@ public class ApplicationLogic {
 		return updateApp;
 	}
 	
-	public void updateApplication(final UpdateApplicationListener ual) {
+	void updateApplication(final UpdateApplicationListener ual) {
 		new Thread(){
 
 			@Override
@@ -152,7 +235,7 @@ public class ApplicationLogic {
 		}.start();
 	}
 	
-	public void cacellUpdateApplication() {
+	void cacellUpdateApplication() {
 		keepDownlaod = false;
 	}
 	
@@ -266,7 +349,7 @@ public class ApplicationLogic {
 		System.err.println("-> OK, finish extracting.");
 	}
 
-	public boolean canDownlaodUpdateApplication() {
+	boolean canDownlaodUpdateApplication() {
 		try {
 			URL  url = new URL(ULR_APP_PACKAGE);
 			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -281,4 +364,75 @@ public class ApplicationLogic {
 			return false;
 		}
 	}
+	
+	boolean checkForAdmin(String plainPassword) {
+		return checkFor("ADMIN_PASSWD", plainPassword);
+	}
+	
+	boolean checkForUser(String plainPassword) {
+		return checkFor("USER_PASSWD", plainPassword);
+	}
+	
+	void updateForAdmin(String plainPassword) {
+		updateFor("ADMIN_PASSWD", plainPassword);
+	}
+	
+	void updateForUser(String plainPassword) {
+		updateFor("USER_PASSWD", plainPassword);
+	}
+	
+	private boolean checkFor(String property,String plainPassword) {
+		if(preferenciaDAO == null){
+			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
+		}
+		
+		Preferencia propertyValue = preferenciaDAO.getPreferencia(property);		
+		String mD5Encrypted = getMD5Encrypted(plainPassword);		
+		boolean valueFor = mD5Encrypted.equals(propertyValue.getValor());
+		
+		System.out.println("->checkFor: propertyValue="+propertyValue.getValor()+" == mD5Encrypted("+plainPassword+")="+mD5Encrypted+" ? "+valueFor);
+		
+		return valueFor;
+	}
+
+	private void updateFor(String property,String plainPassword) {
+		if(preferenciaDAO == null){
+			preferenciaDAO = PreferenciaDAOFactory.getPreferenciaDAO();
+		}
+		
+		String mD5Encrypted = getMD5Encrypted(plainPassword);		
+		Preferencia preferencia = preferenciaDAO.getPreferencia(property);
+		
+		preferencia.setValor(mD5Encrypted);
+		try {
+			preferenciaDAO.edit(preferencia);
+		} catch (EntidadInexistenteException ex) {
+			
+		}
+	}
+	
+	private String getMD5Encrypted(String e) {
+
+        MessageDigest mdEnc = null; // Encryption algorithm
+        try {
+            mdEnc = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException ex) {
+            return null;
+        }
+        mdEnc.update(e.getBytes(), 0, e.length());
+        return (new BigInteger(1, mdEnc.digest())).toString(16);
+    }
+
+	String getVersion() {
+		if(_version == null){
+			Properties porpVersion = new Properties();
+			try {
+				porpVersion.load(getClass().getResourceAsStream("/version.properties"));
+			} catch (IOException ex) {
+				ex.printStackTrace(System.err);
+			}
+		}
+		return _version;
+	}
+	
 }

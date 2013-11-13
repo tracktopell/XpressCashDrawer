@@ -12,6 +12,7 @@ import javax.swing.JFrame;
  */
 public class DialogConfiguracionBTImpresora extends javax.swing.JDialog {
 
+	
 	/**
 	 * Creates new form DialogConfiguracionBTImpresora
 	 */
@@ -46,7 +47,7 @@ public class DialogConfiguracionBTImpresora extends javax.swing.JDialog {
         setTitle("Impresora Bluetooth");
         getContentPane().setLayout(new java.awt.BorderLayout(10, 10));
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Dispositivos Bluetooth al alcance :"));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Dispositivos Bluetooth (IMPRESORAS) al alcance :"));
         jScrollPane1.setViewportView(listaDispositivos);
 
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -60,7 +61,7 @@ public class DialogConfiguracionBTImpresora extends javax.swing.JDialog {
         btaddressActual.setColumns(15);
         jPanel2.add(btaddressActual);
 
-        probarImpresoraBtn.setText("probar");
+        probarImpresoraBtn.setText("-> enviar prueba de impresión");
         jPanel2.add(probarImpresoraBtn);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
@@ -74,9 +75,9 @@ public class DialogConfiguracionBTImpresora extends javax.swing.JDialog {
 
         jPanel3.add(jPanel4, java.awt.BorderLayout.WEST);
 
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 20, 5));
 
-        aceptar.setText("Asignar este");
+        aceptar.setText("Asignar seleccionado");
         jPanel1.add(aceptar);
 
         cancelar.setText("Cancelar");
@@ -86,7 +87,7 @@ public class DialogConfiguracionBTImpresora extends javax.swing.JDialog {
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
-        setSize(new java.awt.Dimension(390, 223));
+        setSize(new java.awt.Dimension(509, 244));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

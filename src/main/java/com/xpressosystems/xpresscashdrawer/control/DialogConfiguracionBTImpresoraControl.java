@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -25,10 +26,21 @@ import javax.swing.event.ListSelectionListener;
  * @author Softtek
  */
 public class DialogConfiguracionBTImpresoraControl implements ActionListener, ListSelectionListener {
-	DialogConfiguracionBTImpresora dcbt;
+	
+	private DialogConfiguracionBTImpresora dcbt;
+	
+	private static DialogConfiguracionBTImpresoraControl instance;
 
-	public DialogConfiguracionBTImpresoraControl(DialogConfiguracionBTImpresora dcbt) {
-		this.dcbt = dcbt;
+	public static DialogConfiguracionBTImpresoraControl getInstance(JFrame parent) {
+		if(instance == null){
+			instance = new DialogConfiguracionBTImpresoraControl(parent);
+		}
+		return instance;
+	}	
+	
+	private DialogConfiguracionBTImpresoraControl(JFrame parent) {
+		
+		this.dcbt = new DialogConfiguracionBTImpresora(parent);
 
 		this.dcbt.getProbarImpresoraBtn().addActionListener(this);
 		this.dcbt.getExplorar().addActionListener(this);

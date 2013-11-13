@@ -8,7 +8,7 @@
     -->
     <info>
 		<appname>XpressCashdrawer</appname>
-        <appversion>0.9</appversion>
+        <appversion>${project.version}</appversion>
         <authors>
             <author name="Alfredo Estrada Gonzalez" email="tracktopell@gmail.com"/>            
         </authors>

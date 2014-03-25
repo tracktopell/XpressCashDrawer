@@ -3,20 +3,20 @@
 Es un sofware prototipo de punto de venta para los 
 negocios de abarrotes pequeños en México.
 
-Cosnta de moudulo de :
+Se compone de los moudulos de :
 -> reporte de ventas
 -> productos
 -> venta 
 
-La impresion esta configurada para enviar texto plano a una 
+La impresión esta configurada para enviar texto plano a una 
 impresora Bluetooth.
 
 Las contraseñas por default son: 
 	Administrador: abc$
 	 Usuario Caja: 123
 
-		Atentamente: 
+Atentamente: 
 
-			Xpressosystems
-
-			Alfredo Estrada G.
+	Alfredo Estrada G.
+	_________________
+	  Xpressosystems

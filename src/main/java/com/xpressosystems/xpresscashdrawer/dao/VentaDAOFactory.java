@@ -4,20 +4,24 @@
  */
 package com.xpressosystems.xpresscashdrawer.dao;
 
-import com.xpressosystems.xpresscashdrawer.dao.memory.VentaDAOInMemory;
-
+import com.xpressosystems.xpresscashdrawer.dao.jdbc.DataSourceAdaptor;
+import com.xpressosystems.xpresscashdrawer.dao.jdbc.VentaDAOJDBC;
+import java.sql.SQLException;
 
 /**
  *
  * @author alfredo
  */
 public class VentaDAOFactory {
-	
+
 	private static VentaDAO ventaDAO;
-	
-	public static VentaDAO getVentaDAO(){
-		if(ventaDAO == null){
-			ventaDAO = new VentaDAOInMemory(); 
+
+	public static VentaDAO getVentaDAO() {
+		if (ventaDAO == null) {
+			try {
+				ventaDAO = new VentaDAOJDBC(DataSourceAdaptor.getConnection());
+			} catch (SQLException ex) {
+			}
 		}
 		return ventaDAO;
 	}

@@ -16,8 +16,22 @@ import javax.swing.JOptionPane;
 public class DialogLoginControl implements ActionListener{
 	DialogLogin dialogLogin;
 	private boolean leggedIn;
+	final int MAX_INTENTOS = 3;
+	int intentos;
+	boolean isAdmin;
 
-	public DialogLoginControl(DialogLogin dialogLogin) {
+	private static DialogLoginControl instance;
+
+	public static DialogLoginControl getInstance(DialogLogin dialogLogin) {
+		if(instance == null){
+			instance = new DialogLoginControl(dialogLogin);
+		}
+		return instance;
+	}
+	
+	
+	
+	private DialogLoginControl(DialogLogin dialogLogin) {
 		this.dialogLogin = dialogLogin;
 		this.dialogLogin.getAceptar().addActionListener(this);
 		this.dialogLogin.getPassword().addActionListener(this);
@@ -35,9 +49,6 @@ public class DialogLoginControl implements ActionListener{
 		}		
 	}
 	
-	final int MAX_INTENTOS = 3;
-	int intentos;
-	
 	private void aceptar_ActionPerformed(){
 		
 		if(!validate()){
@@ -51,7 +62,14 @@ public class DialogLoginControl implements ActionListener{
 			}
 		} else {
 			leggedIn = true;
-			JOptionPane.showMessageDialog(dialogLogin, "¡ Bienvenido al Sistema !", "Entrar", JOptionPane.INFORMATION_MESSAGE);			
+			
+			ApplicationLogic.getInstance().setAdminLogedIn(isAdmin);					
+			if(isAdmin) {
+				JOptionPane.showMessageDialog(dialogLogin, "¡ Bienvenido al Sistema Administrador!", "Entrar", JOptionPane.INFORMATION_MESSAGE);			
+			} else {
+				JOptionPane.showMessageDialog(dialogLogin, "¡ Bienvenido al Sistema Usuario!", "Entrar", JOptionPane.INFORMATION_MESSAGE);						
+			}
+			
 			dialogLogin.dispose();
 		}
 	}
@@ -62,16 +80,20 @@ public class DialogLoginControl implements ActionListener{
 		if(passwordValue.trim().length()<1){
 			return false;
 		}
-		boolean isAdmin = ApplicationLogic.getInstance().checkForAdmin(passwordValue);
+		isAdmin = ApplicationLogic.getInstance().checkForAdmin(passwordValue);
 		if(! isAdmin){
-			return ApplicationLogic.getInstance().checkForUser(passwordValue);
+			return ApplicationLogic.getInstance().checkForUser(passwordValue);			
 		} else {
-			return true;
+			return isAdmin;
 		}
 		
 	}
 
 	public boolean isLoggedIn() {
 		return leggedIn;
+	}
+
+	public boolean isAdminLogedIn() {
+		return isAdmin;
 	}
 }

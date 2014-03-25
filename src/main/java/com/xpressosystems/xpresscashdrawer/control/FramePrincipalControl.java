@@ -56,7 +56,7 @@ public class FramePrincipalControl implements ActionListener{
 		
 		//---------------------------------------------------
 		
-		framePrincipal.getVentaNuevaMenu().addActionListener(this);
+		framePrincipal.getVentaActualMenu().addActionListener(this);
 		
 		framePrincipal.getVentaTerminarMenu().addActionListener(this);
 		
@@ -76,20 +76,13 @@ public class FramePrincipalControl implements ActionListener{
 		
 		framePrincipal.setDefaultCloseOperation(framePrincipal.EXIT_ON_CLOSE);
 		
+		framePrincipal.getConfigMenu().setEnabled(false);
 		
 	}
 	
 	public void estadoInicial() {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {				
-				if(ApplicationLogic.getInstance().isAdminLogedIn()){
-					framePrincipal.getConfigMenu().setEnabled(true);
-					framePrincipal.getProductosMenu().setEnabled(true);
-				}else{					
-					framePrincipal.getConfigMenu().setEnabled(false);
-					framePrincipal.getProductosMenu().setEnabled(false);
-				}
-
 				framePrincipal.setVisible(true);
 				panelVentaControl.estadoInicial();
 			}
@@ -110,8 +103,8 @@ public class FramePrincipalControl implements ActionListener{
 			ventasMenu_actionPerformed();
 		} else if(e.getSource() == framePrincipal.getSalirMenu()){
 			salirMenu_actionPerformed();
-		} else if(e.getSource() == framePrincipal.getVentaNuevaMenu()){
-			ventaNuevaMenu_actionPerformed();
+		} else if(e.getSource() == framePrincipal.getVentaActualMenu()){
+			ventaActualMenu_actionPerformed();
 		} else if(e.getSource() == framePrincipal.getVentaTerminarMenu()){
 			ventaTerminar_actionPerformed();
 		} else if(e.getSource() == framePrincipal.getVentaeliminarProdMenu()){
@@ -156,9 +149,9 @@ public class FramePrincipalControl implements ActionListener{
 		System.exit(0);
 	}
 
-	private void ventaNuevaMenu_actionPerformed() {
+	private void ventaActualMenu_actionPerformed() {
 		((CardLayout)framePrincipal.getPanels().getLayout()).show(framePrincipal.getPanels(), "panelVenta");
-		panelVentaControl.ventaNueva();
+		panelVentaControl.verVentaActual();
 	}
 
 	private void ventaTerminar_actionPerformed() {
@@ -182,4 +175,33 @@ public class FramePrincipalControl implements ActionListener{
 		DialogConfiguracionPasswordControl.getInstance(framePrincipal,
 				DialogConfiguracionPasswordControl.UPDATE_FOR_USER).estadoInicial();
 	}	
+
+	public void enableAndDisableAdminControls() {
+		final PanelProductos pp = (PanelProductos)framePrincipal.getPanelProductos();
+		if(ApplicationLogic.getInstance().isAdminLogedIn()){
+			System.err.println("--->> ADMIN HABILITANDO");
+			framePrincipal.getConfigMenu().setEnabled(true);
+			
+			pp.getEditar().setEnabled(true);
+			pp.getEliminar().setEnabled(true);
+			pp.getNuevo().setEnabled(true);
+		}else{					
+			System.err.println("--->> NORMAL HABILITANDO");
+			framePrincipal.getConfigMenu().setEnabled(false);
+			
+			pp.getEditar().setEnabled(false);
+			pp.getEliminar().setEnabled(false);
+			pp.getNuevo().setEnabled(false);
+		}
+		
+	}
+
+	public void setEnabledVentasMenus(boolean e){
+		
+		framePrincipal.getVentaTerminarMenu().setEnabled(e);
+		
+		framePrincipal.getVentaeliminarProdMenu().setEnabled(e);
+		
+		framePrincipal.getVentaCancelarMenu().setEnabled(e);
+	}
 }

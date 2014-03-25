@@ -36,24 +36,28 @@ import javax.swing.JOptionPane;
  * @author Softtek
  */
 public class ApplicationLogic {
-	private static final String ULR_VERSION_FILE = "http://dulcesaga.com.mx/xcd/version.txt";
+	private static final String ULR_VERSION_FILE = "http://dulcesaga.com.mx/xcd/version.properties";
 	private static final String ULR_APP_PACKAGE  = "http://dulcesaga.com.mx/xcd/UPDATE_BUILD.zip";
 	private static final String FILE_APP_PACKAGE = "./UPDATE_BUILD.zip";
 	
 	private static String _version = null;
-	
+	private static final boolean printingEnabled = false; 
+		
 	private static final String VERSION_PROPERTY = "xpresscashdrawer.version";
-	private static boolean adminLogedIn = false;
+	private boolean adminLogedIn = false;
 	
 	private static ApplicationLogic instance;
 	private static PreferenciaDAO preferenciaDAO;
 	private ApplicationLogic(){	
 	}
 
-	public static boolean isAdminLogedIn() {
+	public boolean isAdminLogedIn() {
 		return adminLogedIn;
 	}
-	
+
+	public void setAdminLogedIn(boolean a) {
+		adminLogedIn = a;
+	}
 	
 
 	public String getNombreNegocio() {
@@ -391,7 +395,7 @@ public class ApplicationLogic {
 		String mD5Encrypted = getMD5Encrypted(plainPassword);		
 		boolean valueFor = mD5Encrypted.equals(propertyValue.getValor());
 		
-		System.out.println("->checkFor: propertyValue="+propertyValue.getValor()+" == mD5Encrypted("+plainPassword+")="+mD5Encrypted+" ? "+valueFor);
+		//System.out.println("->checkFor: propertyValue="+propertyValue.getValor()+" == mD5Encrypted("+plainPassword+")="+mD5Encrypted+" ? "+valueFor);
 		
 		return valueFor;
 	}
@@ -435,6 +439,10 @@ public class ApplicationLogic {
 			}
 		}
 		return _version;
+	}
+
+	boolean isPrintingEnabled() {
+		return printingEnabled;
 	}
 	
 }

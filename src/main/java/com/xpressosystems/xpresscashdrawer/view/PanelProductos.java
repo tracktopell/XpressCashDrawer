@@ -8,6 +8,7 @@ import com.xpressosystems.xpresscashdrawer.model.DetalleProductoTableModel;
 import com.xpressosystems.xpresscashdrawer.model.DetalleVentaTableModel;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 /**
  *
@@ -38,6 +39,8 @@ public class PanelProductos extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         detalleProductoJTable = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        agregarAVenta = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         nuevo = new javax.swing.JButton();
         editar = new javax.swing.JButton();
@@ -63,7 +66,12 @@ public class PanelProductos extends javax.swing.JPanel {
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel3.setLayout(new java.awt.GridLayout(1, 1));
+        jPanel3.setLayout(new java.awt.GridLayout(1, 2));
+
+        agregarAVenta.setText("Agregar +1 a Venta Actual");
+        jPanel1.add(agregarAVenta);
+
+        jPanel3.add(jPanel1);
 
         jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 25, 5));
 
@@ -81,12 +89,14 @@ public class PanelProductos extends javax.swing.JPanel {
         add(jPanel3, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton agregarAVenta;
     private javax.swing.JTextField codigoBuscar;
     private javax.swing.JTable detalleProductoJTable;
     private javax.swing.JButton editar;
     private javax.swing.JButton eliminar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -144,6 +154,10 @@ public class PanelProductos extends javax.swing.JPanel {
 		} catch(Exception ioe){
 		}
 		return ii;
+	}
+
+	public JButton getAgregarAVenta() {
+		return agregarAVenta;
 	}
 
 }

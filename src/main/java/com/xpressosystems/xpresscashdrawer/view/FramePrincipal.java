@@ -37,7 +37,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         salirMenu = new javax.swing.JMenuItem();
         ventaMenu = new javax.swing.JMenu();
-        ventaNuevaMenu = new javax.swing.JMenuItem();
+        ventaActualMenu = new javax.swing.JMenuItem();
         ventaTerminarMenu = new javax.swing.JMenuItem();
         ventaCancelarMenu = new javax.swing.JMenuItem();
         ventaeliminarProdMenu = new javax.swing.JMenuItem();
@@ -79,9 +79,9 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         ventaMenu.setText("Venta");
 
-        ventaNuevaMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        ventaNuevaMenu.setText("Nueva");
-        ventaMenu.add(ventaNuevaMenu);
+        ventaActualMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        ventaActualMenu.setText("Actual");
+        ventaMenu.add(ventaActualMenu);
 
         ventaTerminarMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         ventaTerminarMenu.setText("Terminar");
@@ -168,9 +168,9 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem salirMenu;
     private javax.swing.JMenuItem usuarioAdminMenu;
     private javax.swing.JMenuItem usuarioCajaMenu;
+    private javax.swing.JMenuItem ventaActualMenu;
     private javax.swing.JMenuItem ventaCancelarMenu;
     private javax.swing.JMenu ventaMenu;
-    private javax.swing.JMenuItem ventaNuevaMenu;
     private javax.swing.JMenuItem ventaTerminarMenu;
     private javax.swing.JMenuItem ventaeliminarProdMenu;
     private javax.swing.JMenuItem ventasMenu;
@@ -226,10 +226,10 @@ public class FramePrincipal extends javax.swing.JFrame {
 	}
 
 	/**
-	 * @return the ventaNuevaMenu
+	 * @return the ventaActualMenu
 	 */
-	public javax.swing.JMenuItem getVentaNuevaMenu() {
-		return ventaNuevaMenu;
+	public javax.swing.JMenuItem getVentaActualMenu() {
+		return ventaActualMenu;
 	}
 
 	/**

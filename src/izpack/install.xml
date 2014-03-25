@@ -94,7 +94,7 @@
         <pack name="Application" required="yes">
             <description>The Application</description>
             <file src="../${project.name}.jar"           targetdir="$INSTALL_PATH"/>
-			<executable targetfile="$INSTALL_PATH/${project.distName}.jar" os="unix" type="bin"/>
+			<executable targetfile="$INSTALL_PATH/${project.name}.jar" os="unix" type="bin"/>
 			<executable targetfile="$INSTALL_PATH/run.cmd" os="windows" type="bin"/>
 			<executable targetfile="$INSTALL_PATH/run.sh"  os="linux"   type="bin"/>
 			

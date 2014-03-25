@@ -78,10 +78,10 @@ public class PanelVenta extends javax.swing.JPanel {
 
         jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 25, 5));
 
-        terminar.setText("Terminar");
+        terminar.setText("Terminar Venta [ F2 ]");
         jPanel4.add(terminar);
 
-        cancelar.setText("Cancelar");
+        cancelar.setText("Cancelar [ F12 ]");
         jPanel4.add(cancelar);
 
         jPanel3.add(jPanel4);

@@ -11,17 +11,7 @@ import com.xpressosystems.xpresscashdrawer.control.UpadateApplicationJFrameContr
 import com.xpressosystems.xpresscashdrawer.dao.jdbc.DataSourceAdaptor;
 import com.xpressosystems.xpresscashdrawer.view.DialogLogin;
 import com.xpressosystems.xpresscashdrawer.view.UpadateApplicationJFrame;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.sql.Connection;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
@@ -54,15 +44,21 @@ public class Main {
 			framePrincipalControl = FramePrincipalControl.getInstance();
 
 			DialogLogin dialogLogin = DialogLogin.getInstance(framePrincipalControl.getFramePrincipal());
-			dialogLoginControl = new DialogLoginControl(dialogLogin);
-			
+			dialogLoginControl = DialogLoginControl.getInstance(dialogLogin);			
 						
 			framePrincipalControl.estadoInicial();
 			
+			System.err.println("-------->> antes de login");
+			
 			dialogLoginControl.estadoInicial();
 			
+			System.err.println("-------->> despues de login: dialogLoginControl.isLoggedIn()="+dialogLoginControl.isLoggedIn()+", dialogLoginControl.isAdminLogedIn()="+dialogLoginControl.isAdminLogedIn());
+			
 			if(! dialogLoginControl.isLoggedIn()){
-				throw new IllegalAccessException("COntraseña incorrecta");
+				throw new IllegalAccessException("Contraseña incorrecta");
+			} else {
+				logger.info("->OK logedin, GO !");
+				framePrincipalControl.enableAndDisableAdminControls();				
 			}
 			
 		} catch (Exception e) {
@@ -87,7 +83,7 @@ public class Main {
 			}
 		}
 	}
-
+	/*
 	private static void debugClassLoader() {
 		String os_arch = System.getProperty("os.arch");
 		System.out.println("OS_ARCH:->"+os_arch);
@@ -154,4 +150,5 @@ public class Main {
 		}
 		System.out.println("=========================================================");
 	}
+*/
 }

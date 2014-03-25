@@ -4,7 +4,7 @@
 
 	<groupId>com.xpressosystems</groupId>
 	<artifactId>XpressCashDrawer</artifactId>
-	<version>0.9.14</version>
+	<version>0.9.15</version>
 	<packaging>jar</packaging>
 
 	<name>XpressCashDrawer</name>
@@ -121,7 +121,7 @@
 	<profiles>		
 		
 		<profile>
-			<id>preprod</id>
+			<id>installer</id>
 
 			<properties>
 				<running_mode>production</running_mode>
@@ -225,7 +225,7 @@
 										</copy>
 										<copy todir="${staging.dir}/Productos">
 											<fileset dir="${basedir}/Productos" />
-										</copy>
+										</copy>										
 									</target>
 								</configuration>
 							</execution>
@@ -255,7 +255,7 @@
 								</goals>
 								<configuration>
 									<target>
-										<echo message="=======================ANT Task in install phase, uploading (${project.name}-standard.jar,UPDATE_BUILD.zip,version.txt) to user accesible site ==============>>>"/>
+										<echo message="=======================ANT Task in install phase, uploading (${project.name}-standard.jar,UPDATE_BUILD.zip,version.properties) to user accesible site ==============>>>"/>
 										
 										<ftp   server="dulcesaga.com.mx"
 											   port="21"
@@ -272,8 +272,13 @@
 											<fileset dir="${project.build.directory}">
 												<include name="${project.name}-standard.jar"/>
 											</fileset>
+											<!--
 											<fileset dir="${project.build.directory}/classes">
 												<include name="version.txt"/>
+											</fileset>
+											-->
+											<fileset dir="${project.build.directory}/classes">
+												<include name="version.properties"/>
 											</fileset>
 										</ftp>
 									</target>

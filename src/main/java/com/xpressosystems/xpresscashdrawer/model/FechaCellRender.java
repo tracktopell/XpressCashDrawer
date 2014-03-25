@@ -4,6 +4,7 @@
  */
 package com.xpressosystems.xpresscashdrawer.model;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ public class FechaCellRender extends DefaultTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		Component cell = super.getTableCellRendererComponent(
 				table, df.format(value), isSelected, hasFocus, row, column);
-		
+		//cell.setBackground(Color.RED);
 		return cell;
 	}
 }

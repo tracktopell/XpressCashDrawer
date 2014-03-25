@@ -35,6 +35,8 @@ public class PanelVentasControl implements ActionListener,TableModelListener,Mou
 	private VentaDAO ventaDAO;
 	private DecimalFormat df;
 	VentaTableModel ventasTM;
+	private ImporteCellRender importeCellRender;
+	private FechaCellRender fechaCellRender;
 	public PanelVentasControl(PanelVentas panelVentas) {
 		this.panelVentas = panelVentas;
 		ventasTM = (VentaTableModel)this.panelVentas.getVentasJTable().getModel();
@@ -43,13 +45,10 @@ public class PanelVentasControl implements ActionListener,TableModelListener,Mou
 		panelVentas.getVentasJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		System.err.println("->>table columns="+panelVentas.getVentasJTable().getColumnCount());
 		
-		final ImporteCellRender importeCellRender = new ImporteCellRender();
-		final FechaCellRender fechaCellRender = new FechaCellRender();
+		importeCellRender = new ImporteCellRender();
+		fechaCellRender = new FechaCellRender();
 		
 		importeCellRender.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		panelVentas.getVentasJTable().getColumnModel().getColumn(1).setCellRenderer(fechaCellRender);		
-		panelVentas.getVentasJTable().getColumnModel().getColumn(2).setCellRenderer(importeCellRender);
 		
 		ventaDAO = VentaDAOFactory.getVentaDAO();
 		
@@ -74,6 +73,20 @@ public class PanelVentasControl implements ActionListener,TableModelListener,Mou
 		}
 		ventasTM = new VentaTableModel(ventaList, ventaImporteList);
 		panelVentas.getVentasJTable().setModel(ventasTM);
+		final int tw = panelVentas.getVentasJTable().getWidth();
+		int[] cws = new int[]{10,60,30};
+		int cw;
+		System.err.println("->panelVentas.getVentasJTable().getSize()="+tw);
+		int i=0;
+		for(int cwi : cws) {
+			cw = (tw * cwi)/100;
+			System.err.println("->\tpanelVentas.getVentasJTable().column["+i+"] PreferredWidth:"+cw);
+		
+			panelVentas.getVentasJTable().getColumnModel().getColumn(i++).setPreferredWidth(cw);
+		}
+		
+		panelVentas.getVentasJTable().getColumnModel().getColumn(1).setCellRenderer(fechaCellRender);		
+		panelVentas.getVentasJTable().getColumnModel().getColumn(2).setCellRenderer(importeCellRender);		
 		panelVentas.getVentasJTable().updateUI();
 	}
 	

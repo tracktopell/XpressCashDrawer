@@ -8,6 +8,7 @@ import com.xpressosystems.xpresscashdrawer.model.DetalleVentaTableModel;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  *
@@ -43,6 +44,8 @@ public class PanelVenta extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         terminar = new javax.swing.JButton();
         cancelar = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        imgProducto = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -52,13 +55,16 @@ public class PanelVenta extends javax.swing.JPanel {
         jPanel2.add(jLabel1);
 
         codigoBuscar.setColumns(10);
+        codigoBuscar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jPanel2.add(codigoBuscar);
 
         add(jPanel2, java.awt.BorderLayout.NORTH);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 200));
 
+        detalleVentaJTable.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         detalleVentaJTable.setModel(new DetalleVentaTableModel());
+        detalleVentaJTable.setRowHeight(28);
         jScrollPane1.setViewportView(detalleVentaJTable);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -67,10 +73,12 @@ public class PanelVenta extends javax.swing.JPanel {
 
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setText("Total :");
         jPanel1.add(jLabel2);
 
         total.setColumns(12);
+        total.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         total.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jPanel1.add(total);
 
@@ -87,17 +95,24 @@ public class PanelVenta extends javax.swing.JPanel {
         jPanel3.add(jPanel4);
 
         add(jPanel3, java.awt.BorderLayout.SOUTH);
+
+        jPanel5.setPreferredSize(new java.awt.Dimension(180, 10));
+        jPanel5.add(imgProducto);
+
+        add(jPanel5, java.awt.BorderLayout.LINE_END);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelar;
     private javax.swing.JTextField codigoBuscar;
     private javax.swing.JTable detalleVentaJTable;
+    private javax.swing.JLabel imgProducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton terminar;
     private javax.swing.JTextField total;
@@ -138,6 +153,10 @@ public class PanelVenta extends javax.swing.JPanel {
 		return total;
 	}
 
+	public JLabel getImgProducto() {
+		return imgProducto;
+	}
+	
 	private javax.swing.ImageIcon getBarCodeImageIcon(){
 		javax.swing.ImageIcon ii = null;
 		try{

@@ -35,9 +35,14 @@ public class Main {
 		isSingleInstanceRunning();
 		
 		if( ApplicationLogic.getInstance().needsUpdateApplciation()) {
-			UpadateApplicationJFrame uaf = new UpadateApplicationJFrame();
-			UpadateApplicationJFrameControl uafc = new UpadateApplicationJFrameControl(uaf);
-			uafc.estadoInicial();
+			int respuesta = JOptionPane.showConfirmDialog(null, "Hay una nueva version disponibla, ¿Desea que se descargue y acualizar esta?", 
+									"Actualización disponible", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			
+			if(respuesta == JOptionPane.YES_OPTION){
+				UpadateApplicationJFrame uaf = new UpadateApplicationJFrame();
+				UpadateApplicationJFrameControl uafc = new UpadateApplicationJFrameControl(uaf);
+				uafc.estadoInicial();
+			}
 		}
 		
 		try {

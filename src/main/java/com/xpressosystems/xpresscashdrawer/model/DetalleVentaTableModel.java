@@ -23,8 +23,8 @@ public class DetalleVentaTableModel implements TableModel{
 			Integer.class,String.class,String.class,String.class,String.class,Double.class,Double.class
 	};
 	
-	private List<DetalleVentaTableItem> detalleVentaTableItemList;
-	private List<TableModelListener> tableModelListenerList;
+	private ArrayList<DetalleVentaTableItem> detalleVentaTableItemList;
+	private ArrayList<TableModelListener> tableModelListenerList;
 	
 	public DetalleVentaTableModel(){
 		tableModelListenerList = new ArrayList<TableModelListener> ();
@@ -105,7 +105,7 @@ public class DetalleVentaTableModel implements TableModel{
 	/**
 	 * @return the detalleVentaTableItemList
 	 */
-	public List<DetalleVentaTableItem> getDetalleVentaTableItemList() {
+	public ArrayList<DetalleVentaTableItem> getDetalleVentaTableItemList() {
 		return detalleVentaTableItemList;
 	}
 

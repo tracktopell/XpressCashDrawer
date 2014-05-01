@@ -7,19 +7,20 @@ package com.xpressosystems.xpresscashdrawer.control;
 import com.xpressosystems.xpresscashdrawer.dao.ProductoDAO;
 import com.xpressosystems.xpresscashdrawer.dao.ProductoDAOFactory;
 import com.xpressosystems.xpresscashdrawer.model.CantidadCellRender;
-import com.xpressosystems.xpresscashdrawer.model.DetalleVenta;
-import com.xpressosystems.xpresscashdrawer.model.Producto;
 import com.xpressosystems.xpresscashdrawer.model.DetalleProductoTableModel;
 import com.xpressosystems.xpresscashdrawer.model.ImporteCellRender;
 import com.xpressosystems.xpresscashdrawer.model.Producto;
 import com.xpressosystems.xpresscashdrawer.view.PanelProductos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
@@ -53,7 +54,10 @@ public class PanelProductosControl implements ActionListener,TableModelListener,
 		panelProductos.getDetalleProductoJTable().getColumnModel().getColumn(4).setCellRenderer(importeCellRender);
 		panelProductos.getDetalleProductoJTable().getColumnModel().getColumn(5).setCellRenderer(importeCellRender);
 		panelProductos.getDetalleProductoJTable().getColumnModel().getColumn(6).setCellRenderer(cantidadCellRender);
-		panelProductos.getDetalleProductoJTable().getColumnModel().getColumn(7).setCellRenderer(cantidadCellRender);		
+		panelProductos.getDetalleProductoJTable().getColumnModel().getColumn(7).setCellRenderer(cantidadCellRender);
+			
+		panelProductos.getDetalleProductoJTable().addComponentListener(new JTableColumnAutoResizeHelper(
+				new int[]{12,38,14,14,8,8,8,8}));
 		
 		detalleProductoList = (x).getDetalleProductoList();
 		

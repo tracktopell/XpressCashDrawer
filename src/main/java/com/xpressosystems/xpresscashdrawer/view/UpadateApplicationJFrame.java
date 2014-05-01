@@ -47,7 +47,8 @@ public class UpadateApplicationJFrame extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2);
 
-        setBounds(0, 0, 437, 113);
+        setSize(new java.awt.Dimension(437, 113));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
 	/**

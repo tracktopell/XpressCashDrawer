@@ -10,16 +10,23 @@ import com.xpressosystems.xpresscashdrawer.dao.ProductoDAO;
 import com.xpressosystems.xpresscashdrawer.dao.ProductoDAOFactory;
 import com.xpressosystems.xpresscashdrawer.model.Producto;
 import com.xpressosystems.xpresscashdrawer.view.DialogEdicionProducto;
+import com.xpressosystems.xpresscashdrawer.view.ImagePreviewPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -34,14 +41,15 @@ public class DialogEdicionProductoControl implements ActionListener {
 	DecimalFormat df = new DecimalFormat("########0.00");
 	BufferedImage imagenDeProducto;
 	BufferedImage imagenDefaultProducto;
-	final String imagenesProductos = "./Productos/";
-	
+	public static final String imagenesProductos = "./Productos/";
+
 	private DialogEdicionProductoControl(DialogEdicionProducto panelEdicionProducto) {
 		this.dialogEdicionProducto = panelEdicionProducto;
 		optionClosed = JOptionPane.CANCEL_OPTION;
 
 		dialogEdicionProducto.getAceptar().addActionListener(this);
 		dialogEdicionProducto.getCancelar().addActionListener(this);
+		dialogEdicionProducto.getCambiarFoto().addActionListener(this);
 
 		prodcutoDAO = ProductoDAOFactory.getProductoDAO();
 		try {
@@ -141,6 +149,8 @@ public class DialogEdicionProductoControl implements ActionListener {
 			aceptar_actionPerformed();
 		} else if (e.getSource() == dialogEdicionProducto.getCancelar()) {
 			cancelar_actionPerformed();
+		} else if (e.getSource() == dialogEdicionProducto.getCambiarFoto()) {
+			cambiarFoto_actionPerformed();
 		}
 	}
 
@@ -221,8 +231,8 @@ public class DialogEdicionProductoControl implements ActionListener {
 		final String piezas = dialogEdicionProducto.getCampos()[6].getText();
 		try {
 			int piezasParsed = Integer.parseInt(piezas);
-			if (piezasParsed <= 2) {
-				throw new ValidacionCamposException("Una xpresscashdrawer debe tener lógicamente mas de 2 piezas", dialogEdicionProducto.getCampos()[6]);
+			if (piezasParsed <= 0) {
+				throw new ValidacionCamposException("Las Piezas X Caja lógicamente mas de 0 piezas", dialogEdicionProducto.getCampos()[6]);
 			}
 		} catch (NumberFormatException nfe) {
 			dialogEdicionProducto.getCampos()[6].setText("0");
@@ -320,20 +330,66 @@ public class DialogEdicionProductoControl implements ActionListener {
 		dialogEdicionProducto.dispose();
 	}
 
+	private void cambiarFoto_actionPerformed() {
+		//Create a file chooser
+		final JFileChooser fc = new JFileChooser();
+
+		fc.addChoosableFileFilter(new FileNameExtensionFilter("Solo imagenes JPEG", "jpeg", "jpg"));
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.setMultiSelectionEnabled(false);
+		ImagePreviewPanel preview = new ImagePreviewPanel();
+		fc.setAccessory(preview);
+		fc.addPropertyChangeListener(preview);
+		
+		//In response to a button click:
+		int returnVal = fc.showOpenDialog(dialogEdicionProducto);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			//This is where a real application would open the file.
+			String destPath = imagenesProductos + productoEdicion.getCodigo() + ".jpg";
+			File dest = new File(destPath);
+			try {
+				copyTo(file, dest);
+				cargarImagenDeProducto();
+			} catch (IOException e) {
+				e.printStackTrace(System.err);
+				JOptionPane.showMessageDialog(dialogEdicionProducto, "Hubo un error al copiar la imagen a " + destPath,
+						"Cambiar Foto", JOptionPane.ERROR_MESSAGE);
+			}
+		} else {
+			System.out.println("Open command cancelled by user.");
+		}
+	}
+
+	private void copyTo(File origin, File dest) throws IOException {
+		System.out.println("Copiando:" + origin.getAbsolutePath() + " -> " + dest.getAbsolutePath());
+		InputStream is = new FileInputStream(origin);
+		OutputStream os = new FileOutputStream(dest);
+		byte buffer[] = new byte[1024 * 32];
+		int r;
+		while ((r = is.read(buffer, 0, buffer.length)) != -1) {
+			os.write(buffer, 0, r);
+		}
+		is.close();
+		os.close();
+		System.out.println("Copiando:OK");
+	}
+
 	private void cargarImagenDeProducto() {
 		if (esEdicionNuevoProducto()) {
 			dialogEdicionProducto.getImagenProducto().setIcon(new ImageIcon(imagenDefaultProducto));
 		} else {
 			try {
-				
-				imagenDeProducto = ImageIO.read(new FileInputStream(imagenesProductos+productoEdicion.getCodigo().toUpperCase()+".jpg"));
+
+				imagenDeProducto = ImageIO.read(new FileInputStream(imagenesProductos + productoEdicion.getCodigo().toUpperCase() + ".jpg"));
 				dialogEdicionProducto.getImagenProducto().setIcon(new ImageIcon(imagenDeProducto));
 			} catch (IOException ex) {
 				imagenDeProducto = null;
 				dialogEdicionProducto.getImagenProducto().setIcon(new ImageIcon(imagenDefaultProducto));
 			}
 
-			
+
 		}
 
 	}

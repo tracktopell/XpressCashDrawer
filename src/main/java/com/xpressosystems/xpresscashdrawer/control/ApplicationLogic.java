@@ -202,7 +202,7 @@ public class ApplicationLogic {
 			url = new URL(ULR_VERSION_FILE);
 			is = url.openStream();
 		}catch(IOException ioe){
-		
+			return false;
 		}
 		br = new BufferedReader(new InputStreamReader(is));
 		String lineRead = null;
@@ -224,7 +224,7 @@ public class ApplicationLogic {
 				}
 			}
 		} catch(IOException ioe){
-		
+			return false;
 		}
 		
 		return updateApp;

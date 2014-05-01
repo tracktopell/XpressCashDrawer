@@ -137,7 +137,7 @@ public class TicketBlueToothPrinter implements TicketPrinteService {
                     numIter = 1;
                 }
                 DecimalFormat df_6 = new DecimalFormat("#####0");
-                DecimalFormat dfs5_2 = new DecimalFormat("##,##0.00");
+                DecimalFormat dfs4_2 = new DecimalFormat("###0.00");
 
 
                 double sum_importe = 0.0;
@@ -153,8 +153,13 @@ public class TicketBlueToothPrinter implements TicketPrinteService {
 						
 						//${CODIGO } ${PRODUCTO}
 						//   ${CANT} *  ${PRECIO}  ${IMP}
-						staticVars.put("${CANT}"    , alignTextRigth(df_6.format(pedidoVentaDetalleCollection.get(i).getCantidad()),4));
-                        staticVars.put("${PRODUCTO}", alignTextLeft(prod.getNombre(),25));
+						staticVars.put("${CANT}"    , alignTextRigth(df_6.format(pedidoVentaDetalleCollection.get(i).getCantidad()),3));
+						String nombre = prod.getNombre();
+                        //staticVars.put("${PRODUCTO}", alignTextLeft(prod.getNombre(),25));
+						if(nombre.length()>28){
+							nombre = nombre.substring(28);
+						}
+						staticVars.put("${PRODUCTO}", nombre);
                         
 						staticVars.put("${CODIGO}", alignTextRigth(pedidoVentaDetalleCollection.get(i).getProductoCodigo(),14));                        
 						
@@ -162,9 +167,9 @@ public class TicketBlueToothPrinter implements TicketPrinteService {
                         sum_importe += importe;
                         sum_desc += desc;
 
-                        staticVars.put("${PRECIO}" , alignTextRigth(dfs5_2.format(pedidoVentaDetalleCollection.get(i).getPrecioVenta()),9));
+                        staticVars.put("${PRECIO}" , alignTextRigth(dfs4_2.format(pedidoVentaDetalleCollection.get(i).getPrecioVenta()),7));
                         
-                        staticVars.put("${IMP}", alignTextRigth(dfs5_2.format(importe),9));
+                        staticVars.put("${IMP}", alignTextRigth(dfs4_2.format(importe),7));
                     }
 
                     for (String innerLine : iterationLines) {
@@ -198,20 +203,20 @@ public class TicketBlueToothPrinter implements TicketPrinteService {
                     //System.err.println("#=>>______________");
                     expandDetail = false;
 					final double subTotal = sum_importe;
-                    staticVars.put("${SBTOT}" , alignTextRigth(dfs5_2.format(subTotal),9));
+                    staticVars.put("${SBTOT}" , alignTextRigth(dfs4_2.format(subTotal),9));
                     //staticVars.put("${DESCUENTO}", alignTextRigth(df_6_2.format(sum_desc),12));
                     double total = sum_importe - sum_desc;
-                    String strTotal = dfs5_2.format(total);
+                    String strTotal = dfs4_2.format(total);
                     staticVars.put("${TOTAL}", alignTextRigth(strTotal,9));
 					String recibimosOriginal = extraInformation.get("recibimos").toString();
 					String recibimos = recibimosOriginal;
 					if(recibimos!=null && recibimos.trim().length()>0){
-						recibimos = dfs5_2.format(Double.parseDouble(recibimos));
+						recibimos = dfs4_2.format(Double.parseDouble(recibimos));
 					}
 					staticVars.put("${RECIB}", alignTextRigth(recibimos,9));
 					String suCambio = extraInformation.get("cambio").toString();
 					if(suCambio == null || suCambio.trim().length()==0){
-						suCambio = dfs5_2.format(Double.parseDouble(recibimosOriginal) - total);
+						suCambio = dfs4_2.format(Double.parseDouble(recibimosOriginal) - total);
 					}
 					staticVars.put("${CAMBI}", alignTextRigth(suCambio,9));
 					

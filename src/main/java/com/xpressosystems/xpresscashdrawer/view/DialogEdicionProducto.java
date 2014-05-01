@@ -5,6 +5,7 @@
 package com.xpressosystems.xpresscashdrawer.view;
 
 import com.xpressosystems.xpresscashdrawer.control.FramePrincipalControl;
+import javax.swing.JButton;
 
 /**
  *
@@ -74,6 +75,8 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
         cancelar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         imagenProducto = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        cambiarFoto = new javax.swing.JButton();
 
         jPanel1.setLayout(new java.awt.GridLayout(8, 1));
 
@@ -205,15 +208,21 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
         imagenProducto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel2.add(imagenProducto, java.awt.BorderLayout.CENTER);
 
+        cambiarFoto.setText("Cambiar Foto");
+        jPanel12.add(cambiarFoto);
+
+        jPanel2.add(jPanel12, java.awt.BorderLayout.SOUTH);
+
         getContentPane().add(jPanel2, java.awt.BorderLayout.EAST);
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-641)/2, (screenSize.height-318)/2, 641, 318);
+        setSize(new java.awt.Dimension(641, 318));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aceptar;
+    private javax.swing.JButton cambiarFoto;
     private javax.swing.JButton cancelar;
     private javax.swing.JLabel imagenProducto;
     private javax.swing.JLabel jLabel1;
@@ -227,6 +236,7 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -290,6 +300,9 @@ public class DialogEdicionProducto extends javax.swing.JDialog {
 	public javax.swing.JLabel getImagenProducto() {
 		return imagenProducto;
 	}
-	
+
+	public JButton getCambiarFoto() {
+		return cambiarFoto;
+	}	
 	
 }

@@ -4,12 +4,11 @@
 
 	<groupId>com.xpressosystems</groupId>
 	<artifactId>XpressCashDrawer</artifactId>
-	<version>0.9.15</version>
+	<version>0.9.17</version>
 	<packaging>jar</packaging>
 
 	<name>XpressCashDrawer</name>
-	<url>http://maven.apache.org</url>
-
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j.version>1.5.10</slf4j.version>
@@ -20,50 +19,63 @@
 		<staging.dir>${project.build.directory}/staging</staging.dir>
 		<izpack-standalone.version>4.3.1</izpack-standalone.version>
 	</properties>
-    <!--
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <compress/>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.tracktopell.testbluecovemaven.SendBytesToDevice</mainClass>
-                            <classpathPrefix>lib/</classpathPrefix>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
 
-        <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <configuration>
-                <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.tracktopell.testbluecovemaven.SendBytesToDevice</mainClass>
-                            <classpathPrefix>lib/</classpathPrefix>
-                        </manifest>
-                </archive>
-                <descriptorRefs>
-                    <descriptorRef>jar-with-dependencies</descriptorRef>
-                </descriptorRefs>
-            </configuration>
-        </plugin>
-				  
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>com.xpressosystems.xpresscashdrawer.Main</mainClass>
+							<classpathPrefix>dependency-jars/</classpathPrefix>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+ 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.5.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${staging.dir}/dependency-jars/</outputDirectory>
+						</configuration>
+					</execution>							
+				</executions>	
+			</plugin>		  
 		</plugins>
+	
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	
 	</build>
-	-->
+	
+	
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -110,79 +122,17 @@
 		</dependency>
 		
 	</dependencies>
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-	</build>
+	
+	
 	<profiles>		
 		
 		<profile>
 			<id>installer</id>
-
-			<properties>
-				<running_mode>production</running_mode>
-			</properties>            
             
 			<build>
                 
 				<finalName>${project.name}</finalName>
-				<!--
-				<resources>
-					<resource>
-						<directory>src/main/resources</directory>
-						<filtering>true</filtering>
-					</resource>
-				</resources>
-				-->
 				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>2.3.2</version>
-						<configuration>
-							<source>1.6</source>
-							<target>1.6</target>
-							<encoding>${project.build.sourceEncoding}</encoding>
-						</configuration>
-					</plugin>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jar-plugin</artifactId>
-						<version>2.4</version>
-						<configuration>
-							<archive>
-								<manifest>
-									<addClasspath>true</addClasspath>
-									<mainClass>com.xpressosystems.xpresscashdrawer.Main</mainClass>
-									<classpathPrefix>dependency-jars/</classpathPrefix>
-								</manifest>
-							</archive>
-						</configuration>
-					</plugin>
- 
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<version>2.5.1</version>
-						<executions>
-							<execution>
-								<id>copy-dependencies</id>
-								<phase>package</phase>
-								<goals>
-									<goal>copy-dependencies</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${staging.dir}/dependency-jars/</outputDirectory>
-								</configuration>
-							</execution>							
-						</executions>
-						
-					</plugin>
 										
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -264,6 +214,7 @@
 											   password="0Yl8c7v1vR"
 											   passive="yes"
 											   depends="yes"
+											   verbose="true"
 											   binary="yes">
 											
 											<fileset dir="${project.build.directory}">

@@ -23,15 +23,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -42,7 +48,7 @@ import javax.swing.event.TableModelListener;
 public class PanelVentaControl implements ActionListener, TableModelListener, MouseListener {
 
 	private PanelVenta panelVenta;
-	private List<DetalleVentaTableItem> detalleVentaTableItemList;
+	private ArrayList<DetalleVentaTableItem> detalleVentaTableItemList;
 	private ProductoDAO productoDAO;
 	private VentaDAO ventaDAO;
 	private DecimalFormat df;
@@ -52,16 +58,28 @@ public class PanelVentaControl implements ActionListener, TableModelListener, Mo
 		this.panelVenta = panelVenta;
 		DetalleVentaTableModel x = (DetalleVentaTableModel) this.panelVenta.getDetalleVentaJTable().getModel();
 		x.addTableModelListener(this);
-		panelVenta.getDetalleVentaJTable().addMouseListener(this);
-		panelVenta.getDetalleVentaJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		System.err.println("->>table columns=" + panelVenta.getDetalleVentaJTable().getColumnCount());
 
 		final ImporteCellRender importeCellRender = new ImporteCellRender();
 
 		importeCellRender.setHorizontalAlignment(SwingConstants.RIGHT);
-
+		panelVenta.getDetalleVentaJTable().addMouseListener(this);
+		panelVenta.getDetalleVentaJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		panelVenta.getDetalleVentaJTable().getColumnModel().getColumn(5).setCellRenderer(importeCellRender);
 		panelVenta.getDetalleVentaJTable().getColumnModel().getColumn(6).setCellRenderer(importeCellRender);
+		panelVenta.getDetalleVentaJTable().addComponentListener(new JTableColumnAutoResizeHelper(
+				new int[]{5,18,27,15,15,10,10}));
+		
+		panelVenta.getDetalleVentaJTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				boolean valueIsAdjusting = e.getValueIsAdjusting();
+				//System.out.println("=>TableSelection:"+fi+"->"+li+", adj?"+valueIsAdjusting);
+				if (!valueIsAdjusting) {
+					updateSelectedRow();
+				}
+			}
+		});
 
 		detalleVentaTableItemList = (x).getDetalleVentaTableItemList();
 		ventaDAO = VentaDAOFactory.getVentaDAO();
@@ -108,22 +126,25 @@ public class PanelVentaControl implements ActionListener, TableModelListener, Mo
 			DetalleVenta detalleVenta = new DetalleVenta(-1, -1, productoEncontrado.getCodigo(), 1, productoEncontrado.getPrecioVenta());
 
 			DetalleVentaTableItem detalleVentaTableItemNuevo = null;
-
+			int idx = 0;
 			for (DetalleVentaTableItem dvti : detalleVentaTableItemList) {
 				if (dvti.getCodigo().equals(codigoBuscar)) {
 					detalleVentaTableItemNuevo = dvti;
 					break;
 				}
+				idx++;
 			}
 
 			if (detalleVentaTableItemNuevo == null) {
 				detalleVentaTableItemNuevo = new DetalleVentaTableItem(productoEncontrado, detalleVenta);
+				idx = detalleVentaTableItemList.size();
 				detalleVentaTableItemList.add(detalleVentaTableItemNuevo);
 			} else {
 				detalleVentaTableItemNuevo.setCantidad(detalleVentaTableItemNuevo.getCantidad() + 1);
 			}
 
 			panelVenta.getCodigoBuscar().setText("");
+			panelVenta.getDetalleVentaJTable().getSelectionModel().setSelectionInterval(idx, idx);
 			panelVenta.getDetalleVentaJTable().updateUI();
 			renderTotal();
 		} else {
@@ -170,9 +191,9 @@ public class PanelVentaControl implements ActionListener, TableModelListener, Mo
 			}
 
 			ventaDAO.persist(venta, detalleVentaList);
-			
+
 			JOptionPane.showMessageDialog(FramePrincipalControl.getInstance().getFramePrincipal(), "Se guardo Correctamente, ...Imprimiendo ticket", "Venta", JOptionPane.INFORMATION_MESSAGE);
-			if(ApplicationLogic.getInstance().isPrintingEnabled()){
+			if (ApplicationLogic.getInstance().isPrintingEnabled()) {
 				new Thread() {
 					@Override
 					public void run() {
@@ -209,7 +230,7 @@ public class PanelVentaControl implements ActionListener, TableModelListener, Mo
 		double total = 0.0;
 		if (detalleVentaTableItemList.size() > 0) {
 			FramePrincipalControl.getInstance().setEnabledVentasMenus(true);
-		
+
 			this.panelVenta.getTerminar().setEnabled(true);
 			this.panelVenta.getCancelar().setEnabled(true);
 		} else {
@@ -231,6 +252,35 @@ public class PanelVentaControl implements ActionListener, TableModelListener, Mo
 			if (e.getClickCount() == 2 && panelVenta.getDetalleVentaJTable().getSelectedColumn() == 0) {
 				editarCantidad(panelVenta.getDetalleVentaJTable().getSelectedRow());
 			}
+		}
+	}
+
+	void updateSelectedRow() {
+		int sr = panelVenta.getDetalleVentaJTable().getSelectedRow();
+		System.out.println("=>Selected:sr=" + sr);
+		if(sr != -1){
+			DetalleVentaTableItem prod = detalleVentaTableItemList.get(sr);
+			cargarImagenDeProducto(prod.getProducto());
+		} else {
+			cargarImagenDeProducto(null);
+		}
+	}
+
+	private void cargarImagenDeProducto(Producto prod) {
+		BufferedImage imagenDeProducto = null;
+		if(prod!=null){
+			try {
+				imagenDeProducto = ImageIO.read(new FileInputStream(DialogEdicionProductoControl.imagenesProductos + prod.getCodigo().toUpperCase() + ".jpg"));
+				System.out.println("->cargarImagenDeProducto: "+imagenDeProducto);
+			} catch (IOException ex) {
+				ex.printStackTrace(System.err);
+				imagenDeProducto = null;
+			}
+		}
+		if(imagenDeProducto != null){
+			panelVenta.getImgProducto().setIcon(new ImageIcon(imagenDeProducto));
+		} else if(panelVenta.getImgProducto().getIcon() != null){
+			panelVenta.getImgProducto().setIcon(null);
 		}
 	}
 
@@ -287,18 +337,18 @@ public class PanelVentaControl implements ActionListener, TableModelListener, Mo
 
 		extraInformation.put("recibimos", "100000.45");
 		extraInformation.put("cambio", "2323.00");
-		
-		boolean printed=false;
+
+		boolean printed = false;
 		try {
 			Object ticketFile = ticketPrinteService.generateTicket(venta, detalleVentaList, extraInformation);
 			ticketPrinteService.sendToPrinter(ticketFile);
-			printed=true;
+			printed = true;
 		} catch (IOException ioe) {
 			//ioe.printStackTrace(System.err);
 			JOptionPane.showMessageDialog(FramePrincipalControl.getInstance().getFramePrincipal(), "Error al imprimir Ticket", "Imprimir Ticket", JOptionPane.ERROR_MESSAGE);
 		} finally {
 			System.err.println("------------->>> DESPUES DE IMPRIMIR TICKET");
-			if(!printed) {
+			if (!printed) {
 				System.err.println("------------->>> ERROR AL IMPRIMIR");
 				//t.printStackTrace(System.err);
 				JOptionPane.showMessageDialog(FramePrincipalControl.getInstance().getFramePrincipal(), "Error grave al imprimir Ticket", "Imprimir Ticket", JOptionPane.ERROR_MESSAGE);

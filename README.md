@@ -9,9 +9,5 @@ LOCAL building.
 
 RUN from here:
 
-	mvn clean exec:java -Dexec.mainClass=com.xpressosystems.xpresscashdrawer.Main
-
-Update & Upload the installer int the website
-
-	mvn clean install -Pinstaller
+	mvn exec:java -Dexec.mainClass=com.xpressosystems.xpresscashdrawer.Main
 

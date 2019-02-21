@@ -270,7 +270,7 @@ public class PanelVentaControl implements ActionListener, TableModelListener, Mo
 		BufferedImage imagenDeProducto = null;
 		if(prod!=null){
 			try {
-				imagenDeProducto = ImageIO.read(new FileInputStream(DialogEdicionProductoControl.imagenesProductos + prod.getCodigo().toUpperCase() + ".jpg"));
+				imagenDeProducto = ImageIO.read(new FileInputStream(DialogEdicionProductoControl.getImgPath() + prod.getCodigo().toUpperCase() + ".jpg"));
 				System.out.println("->cargarImagenDeProducto: "+imagenDeProducto);
 			} catch (IOException ex) {
 				ex.printStackTrace(System.err);

@@ -41,10 +41,32 @@ public class DialogEdicionProductoControl implements ActionListener {
 	DecimalFormat df = new DecimalFormat("########0.00");
 	BufferedImage imagenDeProducto;
 	BufferedImage imagenDefaultProducto;
-	public static final String imagenesProductos = "./Productos/";
+	private static final String imagenesProductos     = "/Productos";
+	private static       String baseImagenesProductos = null;
 
+	public static String getImgPath(){
+		if(baseImagenesProductos == null){
+			File runPath    = new File(".");
+			File imagesPath = null;
+			
+			imagesPath = new File(runPath,imagenesProductos);
+			if(!imagesPath.exists() ||  !imagesPath.isDirectory() ){
+				runPath    = new File("./XpressCashDrawer");
+				imagesPath = new File(runPath,imagenesProductos);
+			}
+			if(!imagesPath.exists() || !imagesPath.isDirectory() ){
+				runPath    = new File("..");
+				imagesPath = new File(runPath,imagenesProductos);
+			}
+
+			baseImagenesProductos = runPath.toString()+imagenesProductos+"/";
+		}
+		return baseImagenesProductos;
+
+	}	
 	private DialogEdicionProductoControl(DialogEdicionProducto panelEdicionProducto) {
 		this.dialogEdicionProducto = panelEdicionProducto;
+
 		optionClosed = JOptionPane.CANCEL_OPTION;
 
 		dialogEdicionProducto.getAceptar().addActionListener(this);
@@ -347,7 +369,7 @@ public class DialogEdicionProductoControl implements ActionListener {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
 			//This is where a real application would open the file.
-			String destPath = imagenesProductos + productoEdicion.getCodigo() + ".jpg";
+			String destPath = getImgPath() + productoEdicion.getCodigo() + ".jpg";
 			File dest = new File(destPath);
 			try {
 				copyTo(file, dest);
@@ -382,7 +404,7 @@ public class DialogEdicionProductoControl implements ActionListener {
 		} else {
 			try {
 
-				imagenDeProducto = ImageIO.read(new FileInputStream(imagenesProductos + productoEdicion.getCodigo().toUpperCase() + ".jpg"));
+				imagenDeProducto = ImageIO.read(new FileInputStream(getImgPath() + productoEdicion.getCodigo().toUpperCase() + ".jpg"));
 				dialogEdicionProducto.getImagenProducto().setIcon(new ImageIcon(imagenDeProducto));
 			} catch (IOException ex) {
 				imagenDeProducto = null;
